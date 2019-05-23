@@ -1,0 +1,7 @@
+-cp src
+-dce full
+
+-cpp bin/cpp/main
+
+# main
+-main src.Main
