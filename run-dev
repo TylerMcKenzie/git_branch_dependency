@@ -1,1 +1,1 @@
-haxe -cp src/ -main src.Main
+haxe -cp src/ -main src.Main --interp
