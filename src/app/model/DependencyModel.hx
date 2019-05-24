@@ -13,6 +13,8 @@ class DependencyModel {
 
     private var dependencies = null;
 
+    private var dependencyGraph = null;
+
     public function new() {}
 
     public function save(content = "", convertJson = false) : Void
@@ -39,10 +41,12 @@ class DependencyModel {
     public function loadDependencies(branch:String) : Void
     {
         if (FileSystem.exists(JSON_FILE)) {
-            var fileDependencies:DependencyData = Json.parse(File.getContent(JSON_FILE));
-            dependencies = fileDependencies.branches[branch];
-        } else {
-           save();
+            if (dependencyGraph == null) {
+                var fileDependencies:DependencyData = Json.parse(File.getContent(JSON_FILE));
+                dependencyGraph = fileDependencies.branches;
+            }
+
+            dependencies = dependencyGraph[branch];
         }
     }
 }
