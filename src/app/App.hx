@@ -29,10 +29,7 @@ class App {
         }
     }
 
-    private function processArgs()
-    {
-        
-    }
+    private function processArgs() {}
 
     private function addDependency(dependency:String)
     {

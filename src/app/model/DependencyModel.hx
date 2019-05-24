@@ -24,9 +24,16 @@ class DependencyModel {
         File.saveContent(JSON_FILE, content);
     }
 
-    public function getDependencies() : Dynamic
+    public function getDependencies()
     {
         return dependencies;
+    }
+
+    public function addDependency(dependency:String)
+    {
+        if (dependencies.indexOf(dependency) == -1) {
+            dependencies.push(dependency);
+        }
     }
 
     public function loadDependencies(branch:String) : Void
