@@ -15,6 +15,9 @@ class App {
     {
         var args:Array<String> = Sys.args();
 
+        // This updates remotes to get accurate checks
+        new Process("git", ["remote", "update"]);
+
         for (i in 0...args.length) {
             switch args[i] {
                 case "list":
@@ -91,7 +94,7 @@ class App {
 
     private function getBranchRemoteStatus(branch:String)
     {
-        var aheadDiff = branch + "...origin/" + branch;
+        var aheadDiff = "origin/" + branch + ".." + branch;
         var behindDiff = branch + "..origin/" + branch;
 
         var ahead = StringTools.trim(new Process("git", ["rev-list", "--count", aheadDiff]).stdout.readAll().toString());
