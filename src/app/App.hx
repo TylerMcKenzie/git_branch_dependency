@@ -48,12 +48,38 @@ class App {
         var deps = dependencyModel.getDependencies();
 
         for(dep in deps) {
-
+//            mergeBranch(dep);
         }
     }
 
+    private function mergeBranch(branch:String)
+    {
+        new Process("git", ["merge", branch, "--no-ff"]);
+    }
+
     private function checkDependencyRemoteStatus()
-    {}
+    {
+        var deps = dependencyModel.getDependencies();
+
+        for(dep in deps) {
+            var status = getBranchRemoteStatus(dep);
+            Sys.print(dep + ": [ahead " + status.ahead + ", behind " + status.behind + "]\n");
+        }
+    }
+
+    private function getBranchRemoteStatus(branch:String)
+    {
+        var aheadDiff = branch+"...origin/"+branch;
+        var behindDiff = branch+"..origin/"+branch;
+
+        var ahead = new Process("git", ["rev-list", "--count", aheadDiff]).stdout.readAll().toString();
+        var behind = new Process("git", ["rev-list", "--count", behindDiff]).stdout.readAll().toString();
+
+        return {
+            ahead: ahead,
+            behind: behind
+        };
+    }
 
     private function getCurrentBranch() : String
     {
