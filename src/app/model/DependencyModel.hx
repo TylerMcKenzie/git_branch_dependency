@@ -58,7 +58,7 @@ class DependencyModel {
             throw "A branch is required to be loaded.\n";
         }
 
-        branch = StringTools.replace(branch, "\n", "");
+        branch = StringTools.trim(branch);
 
         if (dependencyGraph.exists(branch)) {
             dependencies = dependencyGraph[branch].deps;

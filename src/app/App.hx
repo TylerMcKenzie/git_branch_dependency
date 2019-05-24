@@ -17,6 +17,11 @@ class App {
 
         for (i in 0...args.length) {
             switch args[i] {
+                case "list":
+                    Sys.println("Showing dependencies for [" + StringTools.trim(getCurrentBranch()) + "]:");
+                    for (dependency in dependencyModel.getDependencies()) {
+                        Sys.println(dependency);
+                    }
                 case "status":
                     checkDependencyRemoteStatus();
                 case "update":
@@ -63,7 +68,7 @@ class App {
 
         for(dep in deps) {
             var status = getBranchRemoteStatus(dep);
-            Sys.print(dep + ": [ahead " + status.ahead + ", behind " + status.behind + "]\n");
+            Sys.println(dep + ": [ahead " + status.ahead + ", behind " + status.behind + "]");
         }
     }
 
@@ -72,8 +77,8 @@ class App {
         var aheadDiff = branch+"...origin/"+branch;
         var behindDiff = branch+"..origin/"+branch;
 
-        var ahead = new Process("git", ["rev-list", "--count", aheadDiff]).stdout.readAll().toString();
-        var behind = new Process("git", ["rev-list", "--count", behindDiff]).stdout.readAll().toString();
+        var ahead = StringTools.trim(new Process("git", ["rev-list", "--count", aheadDiff]).stdout.readAll().toString());
+        var behind = StringTools.trim(new Process("git", ["rev-list", "--count", behindDiff]).stdout.readAll().toString());
 
         return {
             ahead: ahead,
