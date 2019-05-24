@@ -3,17 +3,21 @@ package app.model;
 import sys.io.File;
 import sys.FileSystem;
 import haxe.Json;
+import haxe.DynamicAccess;
 
-typedef DependencyData = Map<String, Array<String>>;
+typedef DependencyData = {
+    var deps:Array<String>;
+}
 
 class DependencyModel {
     public static var JSON_FILE:String = ".git-dep.json";
 
     private var dependencies = null;
 
-    private var dependencyGraph = null;
+    private var dependencyGraph:DynamicAccess<DependencyData> = null;
 
-    public function new() {
+    public function new()
+    {
         loadDependencyGraph();
     }
 
@@ -39,25 +43,32 @@ class DependencyModel {
 
     public function removeDependency(dependency:String) : Bool
     {
-        if (var depIndex = dependencies.indexOf(dependency) != -1) {
+        if (dependencies.indexOf(dependency) != -1) {
             return dependencies.remove(dependency);
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function loadDependencies(branch:String) : Void
     {
-        dependencies = dependencyGraph[branch];
+        trace(dependencyGraph);
+        if (dependencyGraph.exists(branch)) {
+            dependencies = dependencyGraph[branch];
+        } else {
+            dependencyGraph[branch] = [];
+            dependencies = dependencyGraph[branch];
+            save();
+        }
     }
 
     private function loadDependencyGraph() : Void
     {
          if (FileSystem.exists(JSON_FILE)) {
-            var fileDependencies:DependencyData = Json.parse(File.getContent(JSON_FILE));
+            var fileDependencies:DynamicAccess<DependencyData> = Json.parse(File.getContent(JSON_FILE));
             dependencyGraph = fileDependencies;
         } else {
-            dependencyGraph = new Map<String, Array<String>>();
+            dependencyGraph = { master: { deps: [] }};
             save();
         }
     }

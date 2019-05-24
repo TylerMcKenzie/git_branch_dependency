@@ -1,6 +1,7 @@
 package app;
 
 import app.model.DependencyModel;
+import sys.io.Process;
 
 class App {
     private var dependencyModel:DependencyModel = new DependencyModel();
@@ -49,7 +50,6 @@ class App {
 
     private function getCurrentBranch() : String
     {
-        var currentBranch:String = new Process("git", ["rev-parse", "--abbrev-ref", "HEAD"]).stdout.readAll().toString();
-        return currentBranch;
+        return new Process("git", ["rev-parse", "--abbrev-ref", "HEAD"]).stdout.readAll().toString();
     }
 }
