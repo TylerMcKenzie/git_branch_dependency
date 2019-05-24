@@ -6,7 +6,8 @@ import sys.io.Process;
 class App {
     private var dependencyModel:DependencyModel = new DependencyModel();
 
-    public function new() {
+    public function new()
+    {
         dependencyModel.loadDependencies(getCurrentBranch());
     }
 
@@ -30,20 +31,26 @@ class App {
         }
     }
 
-    private function processArgs() {}
-
     private function addDependency(dependency:String)
     {
-        trace("add");
+        dependencyModel.addDependency(dependency);
+        dependencyModel.save();
     }
 
     private function removeDependency(dependency:String)
     {
-        trace("remove");
+        dependencyModel.removeDependency(dependency);
+        dependencyModel.save();
     }
 
     private function updateDependencyRemotes()
-    {}
+    {
+        var deps = dependencyModel.getDependencies();
+
+        for(dep in deps) {
+
+        }
+    }
 
     private function checkDependencyRemoteStatus()
     {}

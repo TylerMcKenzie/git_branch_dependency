@@ -6,13 +6,15 @@ import haxe.Json;
 import haxe.DynamicAccess;
 
 typedef DependencyData = {
-    var deps:Array<String>;
+    @optional var deps:Array<String>;
 }
 
 class DependencyModel {
     public static var JSON_FILE:String = ".git-dep.json";
 
-    private var dependencies = null;
+    private var currentBranch:String = null;
+
+    private var dependencies:Array<String> = null;
 
     private var dependencyGraph:DynamicAccess<DependencyData> = null;
 
@@ -52,12 +54,19 @@ class DependencyModel {
 
     public function loadDependencies(branch:String) : Void
     {
-        trace(dependencyGraph);
+        if (branch.length == 0) {
+            throw "A branch is required to be loaded.\n";
+        }
+
+        branch = StringTools.replace(branch, "\n", "");
+
         if (dependencyGraph.exists(branch)) {
-            dependencies = dependencyGraph[branch];
+            dependencies = dependencyGraph[branch].deps;
+            currentBranch = branch;
         } else {
-            dependencyGraph[branch] = [];
-            dependencies = dependencyGraph[branch];
+            dependencyGraph[branch] = { deps: [] };
+            dependencies = dependencyGraph[branch].deps;
+            currentBranch = branch;
             save();
         }
     }
@@ -68,7 +77,7 @@ class DependencyModel {
             var fileDependencies:DynamicAccess<DependencyData> = Json.parse(File.getContent(JSON_FILE));
             dependencyGraph = fileDependencies;
         } else {
-            dependencyGraph = { master: { deps: [] }};
+            dependencyGraph = {};
             save();
         }
     }
