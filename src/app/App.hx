@@ -68,14 +68,18 @@ class App {
 
         for(dep in deps) {
             var status = getBranchRemoteStatus(dep);
-            Sys.println(dep + ": [ahead " + status.ahead + ", behind " + status.behind + "]");
+            if (Std.parseInt(status.ahead) > 0 || Std.parseInt(status.behind) > 0) {
+                Sys.println(dep + ": [ahead " + status.ahead + ", behind " + status.behind + "]");
+            } else {
+                Sys.println(dep + ": [up to date]");
+            }
         }
     }
 
     private function getBranchRemoteStatus(branch:String)
     {
-        var aheadDiff = branch+"...origin/"+branch;
-        var behindDiff = branch+"..origin/"+branch;
+        var aheadDiff = branch + "...origin/" + branch;
+        var behindDiff = branch + "..origin/" + branch;
 
         var ahead = StringTools.trim(new Process("git", ["rev-list", "--count", aheadDiff]).stdout.readAll().toString());
         var behind = StringTools.trim(new Process("git", ["rev-list", "--count", behindDiff]).stdout.readAll().toString());
