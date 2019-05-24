@@ -1,6 +1,8 @@
 -cp src
 -dce full
 
+-D haxeJSON
+
 -cpp bin/cpp/main
 
 # main

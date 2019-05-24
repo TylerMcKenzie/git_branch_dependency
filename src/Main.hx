@@ -1,10 +1,11 @@
 package src;
 
+import app.App;
+
 class Main {
     public static function main() : Void
     {
-        trace("Hello");
-        // PSEUDO
-        
+        var app = new App();
+        app.run();
     }
 }
