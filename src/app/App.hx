@@ -16,7 +16,7 @@ class App {
         var args:Array<String> = Sys.args();
 
         // This updates remotes to get accurate checks
-        new Process("git", ["remote", "update"]);
+        Sys.command("git", ["remote", "update"]);
 
         for (i in 0...args.length) {
             switch args[i] {
