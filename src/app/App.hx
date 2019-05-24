@@ -51,15 +51,28 @@ class App {
     private function updateDependencyRemotes()
     {
         var deps = dependencyModel.getDependencies();
+        var updated = false;
 
         for(dep in deps) {
-//            mergeBranch(dep);
+            var dependencyStatus = getBranchRemoteStatus(dep);
+
+            if (Std.parseInt(dependencyStatus.behind) > 0) {
+                mergeBranch(dep);
+                updated = true;
+            }
+        }
+
+        if (updated) {
+            Sys.println("Branch Dependencies updated.");
+        } else {
+            Sys.println("Nothing updated.");
         }
     }
 
     private function mergeBranch(branch:String)
     {
-        new Process("git", ["merge", branch, "--no-ff"]);
+        var originBranch = "origin/" + branch;
+        new Process("git", ["merge", originBranch, "--no-ff"]);
     }
 
     private function checkDependencyRemoteStatus()
