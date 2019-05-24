@@ -91,7 +91,7 @@ class App {
 
     private function getBranchRemoteStatus(branch:String)
     {
-        var aheadDiff = branch + "...origin/" + branch;
+        var aheadDiff = "origin/" + branch + ".." + branch;
         var behindDiff = branch + "..origin/" + branch;
 
         var ahead = StringTools.trim(new Process("git", ["rev-list", "--count", aheadDiff]).stdout.readAll().toString());
