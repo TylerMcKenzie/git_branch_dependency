@@ -59,10 +59,8 @@ class DependencyModel {
     public function loadDependencies(branch:String) : Void
     {
         if (branch.length == 0) {
-            throw "A branch is required to be loaded.\n";
+            throw "A branch is required to be loaded.";
         }
-
-        branch = StringTools.trim(branch);
 
         if (dependencyGraph.exists(branch)) {
             dependencies = dependencyGraph[branch].deps;

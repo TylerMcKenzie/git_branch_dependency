@@ -15,19 +15,23 @@ class App {
     {
         var args:Array<String> = Sys.args();
 
-        // This updates remotes to get accurate checks
-        Sys.command("git", ["remote", "update"]);
-
         for (i in 0...args.length) {
             switch args[i] {
                 case "list":
-                    Sys.println("Showing dependencies for [" + StringTools.trim(getCurrentBranch()) + "]:");
+                    var currBranch = getCurrentBranch();
+                    Sys.println('Showing dependencies for [$currBranch]:');
                     for (dependency in dependencyModel.getDependencies()) {
                         Sys.println(dependency);
                     }
                 case "status":
+                    Sys.println("Updating remotes");    
+                    updateRemotes();
+
                     checkDependencyRemoteStatus();
                 case "update":
+                    Sys.println("Updating remotes");    
+                    updateRemotes();
+
                     updateDependencyRemotes();
                 case "-a":
                     var dep = args[i+1];
@@ -74,8 +78,8 @@ class App {
 
     private function mergeBranch(branch:String)
     {
-        var originBranch = "origin/" + branch;
-        new Process("git", ["merge", originBranch, "--no-ff"]);
+        var originBranch = "origin/$branch";
+        new Process("git", ["merge", originBranch, "--no-ff"]).exitCode(true);
     }
 
     private function checkDependencyRemoteStatus()
@@ -94,8 +98,8 @@ class App {
 
     private function getBranchRemoteStatus(branch:String)
     {
-        var aheadDiff = "origin/" + branch + ".." + branch;
-        var behindDiff = branch + "..origin/" + branch;
+        var aheadDiff = 'origin/$branch..$branch';
+        var behindDiff = '$branch..origin/$branch';
 
         var ahead = StringTools.trim(new Process("git", ["rev-list", "--count", aheadDiff]).stdout.readAll().toString());
         var behind = StringTools.trim(new Process("git", ["rev-list", "--count", behindDiff]).stdout.readAll().toString());
@@ -108,6 +112,18 @@ class App {
 
     private function getCurrentBranch() : String
     {
-        return new Process("git", ["rev-parse", "--abbrev-ref", "HEAD"]).stdout.readAll().toString();
+        var process = new Process("git", ["rev-parse", "--abbrev-ref", "HEAD"]);
+
+        process.exitCode();
+
+        var b = StringTools.trim(process.stdout.readAll().toString());
+
+        return b;
+    }
+
+    private function updateRemotes()
+    {
+        // This updates remotes to get accurate checks
+        new Process("git", ["remote", "update"]).exitCode();
     }
 }
