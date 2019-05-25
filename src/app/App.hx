@@ -24,12 +24,12 @@ class App {
                         Sys.println(dependency);
                     }
                 case "status":
-                    Sys.println("Updating remotes");    
+                    Sys.println("Updating remotes");
                     updateRemotes();
 
                     checkDependencyRemoteStatus();
                 case "update":
-                    Sys.println("Updating remotes");    
+                    Sys.println("Updating remotes");
                     updateRemotes();
 
                     updateDependencyRemotes();
