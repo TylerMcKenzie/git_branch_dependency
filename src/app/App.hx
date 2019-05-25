@@ -78,7 +78,7 @@ class App {
 
     private function mergeBranch(branch:String)
     {
-        var originBranch = "origin/$branch";
+        var originBranch = 'origin/$branch';
         new Process("git", ["merge", originBranch, "--no-ff"]).exitCode(true);
     }
 
