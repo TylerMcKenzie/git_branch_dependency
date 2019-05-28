@@ -71,8 +71,8 @@ class App {
 
             preparedBranches.push(dep);
         }
-
-        Sys.command("git", ["pull", "origin", preparedBranches.join(" ")]);
+        var branchesToPull = preparedBranches.join(" ");
+        Sys.command("git", ["pull", "origin", branchesToPull]);
 
         // if (exitCode != 0) {
         //     updated = false;
