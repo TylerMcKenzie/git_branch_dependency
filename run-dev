@@ -1,1 +1,0 @@
-haxe -cp src/ -D haxeJSON -main src.Main --interp
