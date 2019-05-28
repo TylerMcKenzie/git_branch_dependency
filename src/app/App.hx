@@ -72,7 +72,7 @@ class App {
             preparedBranches.push(dep);
         }
 
-        var exitCode = new Process("git", ["pull", "origin", preparedBranches.join(" ")]).exitCode();
+        var exitCode = new Process("git", ["pull", "origin", preparedBranches.join(" ")]).exitCode(true);
 
         if (exitCode != 0) {
             updated = false;
