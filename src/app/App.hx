@@ -11,7 +11,7 @@ class App {
         dependencyModel.loadDependencies(getCurrentBranch());
     }
 
-    public function run()
+    public function run() : Void
     {
         var args:Array<String> = Sys.args();
 
@@ -43,71 +43,90 @@ class App {
         }
     }
 
-    private function addDependency(dependency:String)
+    private function addDependency(dependency:String) : Void
     {
         dependencyModel.addDependency(dependency);
         dependencyModel.save();
     }
 
-    private function removeDependency(dependency:String)
+    private function removeDependency(dependency:String) : Void
     {
         dependencyModel.removeDependency(dependency);
         dependencyModel.save();
     }
 
-    private function updateDependencyRemotes()
+    private function updateDependencyRemotes() : Void
     {
         var deps = dependencyModel.getDependencies();
         var updated = false;
+
+        var preparedBranches:Array<String> = [];
 
         for(dep in deps) {
             var dependencyStatus = getBranchRemoteStatus(dep);
 
             if (Std.parseInt(dependencyStatus.behind) > 0) {
-                mergeBranch(dep);
-                updated = true;
+                updateBranch(dep);
             }
+
+            preparedBranches.push(dep);
         }
 
-        if (updated) {
-            Sys.println("Branch Dependencies updated.");
-        } else {
-            Sys.println("Nothing updated.");
-        }
+        var gitPullArgs = ["pull", "origin"].concat(preparedBranches);
+        Sys.command("git", gitPullArgs);
     }
 
-    private function mergeBranch(branch:String)
+    private function updateBranch(branch:String) : Void
+    {
+        new Process("git", ["fetch", "origin", '$branch:$branch']).exitCode();
+    }
+
+    private function mergeBranch(branch:String) : Void
     {
         var originBranch = 'origin/$branch';
         new Process("git", ["merge", originBranch, "--no-ff"]).exitCode(true);
     }
 
-    private function checkDependencyRemoteStatus()
+    private function checkDependencyRemoteStatus() : Void
     {
         var deps = dependencyModel.getDependencies();
 
         for(dep in deps) {
             var status = getBranchRemoteStatus(dep);
+
+            var mergedStatus = getBranchMergeStatus(dep);
+
             if (Std.parseInt(status.ahead) > 0 || Std.parseInt(status.behind) > 0) {
-                Sys.println(dep + ": [ahead " + status.ahead + ", behind " + status.behind + "]");
+                Sys.println('(${dep}) Remote: [ahead ${status.ahead}, behind ${status.behind}] Local: ${mergedStatus}');
             } else {
-                Sys.println(dep + ": [up to date]");
+                Sys.println('(${dep}) Remote: [up to date] Local: ${mergedStatus}');
             }
         }
     }
 
-    private function getBranchRemoteStatus(branch:String)
+    private function getBranchRemoteStatus(branch:String) : Dynamic
     {
-        var aheadDiff = 'origin/$branch..$branch';
-        var behindDiff = '$branch..origin/$branch';
+        var branchToOrigin = '$branch...origin/$branch';
 
-        var ahead = StringTools.trim(new Process("git", ["rev-list", "--count", aheadDiff]).stdout.readAll().toString());
-        var behind = StringTools.trim(new Process("git", ["rev-list", "--count", behindDiff]).stdout.readAll().toString());
+        var ahead = StringTools.trim(new Process("git", ["rev-list", "--left-only", "--count", branchToOrigin]).stdout.readAll().toString());
+        var behind = StringTools.trim(new Process("git", ["rev-list", "--right-only", "--count", branchToOrigin]).stdout.readAll().toString());
 
         return {
             ahead: ahead,
             behind: behind
         };
+    }
+
+    private function getBranchMergeStatus(branch:String) : String
+    {
+        var dirtyMergedBranches = new Process("git", ["branch", "--merged"]).stdout.readAll().toString().split("\n");
+        var cleanMergedBranches = [for (dB in dirtyMergedBranches) StringTools.trim(dB)];
+
+        if (cleanMergedBranches.indexOf(branch) == -1) {
+            return "unmerged";
+        }
+
+        return "merged";
     }
 
     private function getCurrentBranch() : String
@@ -121,7 +140,7 @@ class App {
         return b;
     }
 
-    private function updateRemotes()
+    private function updateRemotes() : Void
     {
         // This updates remotes to get accurate checks
         new Process("git", ["remote", "update"]).exitCode();
