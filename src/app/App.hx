@@ -103,7 +103,7 @@ class App {
 
     private function getBranchRemoteStatus(branch:String) : Dynamic
     {
-        var branchToOrigin = '$branch..origin/$branch';
+        var branchToOrigin = '$branch...origin/$branch';
 
         var ahead = StringTools.trim(new Process("git", ["rev-list", "--left-only", "--count", branchToOrigin]).stdout.readAll().toString());
         var behind = StringTools.trim(new Process("git", ["rev-list", "--right-only", "--count", branchToOrigin]).stdout.readAll().toString());
