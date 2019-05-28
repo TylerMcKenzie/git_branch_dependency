@@ -94,9 +94,9 @@ class App {
         for(dep in deps) {
             var status = getBranchRemoteStatus(dep);
             if (Std.parseInt(status.ahead) > 0 || Std.parseInt(status.behind) > 0) {
-                Sys.println(dep + ": [ahead " + status.ahead + ", behind " + status.behind + "]");
+                Sys.println('(${dep}) Remote: [ahead ${status.ahead}, behind ${status.behind}] ');
             } else {
-                Sys.println(dep + ": [up to date]");
+                Sys.println('(${dep}) Remote: [up to date]');
             }
         }
     }
