@@ -72,19 +72,19 @@ class App {
             preparedBranches.push(dep);
         }
 
-        var exitCode = new Process("git", ["pull", "origin", preparedBranches.join(" ")]).exitCode(true);
+        Sys.command("git", ["pull", "origin", preparedBranches.join(" ")]);
 
-        if (exitCode != 0) {
-            updated = false;
-        } else {
-            updated = true;
-        }
+        // if (exitCode != 0) {
+        //     updated = false;
+        // } else {
+        //     updated = true;
+        // }
 
-        if (updated) {
-            Sys.println("Branch Dependencies updated.");
-        } else {
-            Sys.println("Nothing updated.");
-        }
+        // if (updated) {
+        //     Sys.println("Branch Dependencies updated.");
+        // } else {
+        //     Sys.println("Nothing updated.");
+        // }
     }
 
     private function updateBranch(branch:String) : Void
