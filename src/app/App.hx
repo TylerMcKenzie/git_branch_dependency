@@ -74,18 +74,6 @@ class App {
 
         var gitPullArgs = ["pull", "origin"].concat(preparedBranches);
         Sys.command("git", gitPullArgs);
-
-        // if (exitCode != 0) {
-        //     updated = false;
-        // } else {
-        //     updated = true;
-        // }
-
-        // if (updated) {
-        //     Sys.println("Branch Dependencies updated.");
-        // } else {
-        //     Sys.println("Nothing updated.");
-        // }
     }
 
     private function updateBranch(branch:String) : Void
