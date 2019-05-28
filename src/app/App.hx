@@ -93,10 +93,13 @@ class App {
 
         for(dep in deps) {
             var status = getBranchRemoteStatus(dep);
+
+            var mergedStatus = getBranchMergeStatus(dep);
+
             if (Std.parseInt(status.ahead) > 0 || Std.parseInt(status.behind) > 0) {
-                Sys.println('(${dep}) Remote: [ahead ${status.ahead}, behind ${status.behind}] ');
+                Sys.println('(${dep}) Remote: [ahead ${status.ahead}, behind ${status.behind}] Local: ${mergedStatus}');
             } else {
-                Sys.println('(${dep}) Remote: [up to date]');
+                Sys.println('(${dep}) Remote: [up to date] Local: ${mergedStatus}');
             }
         }
     }
@@ -112,6 +115,18 @@ class App {
             ahead: ahead,
             behind: behind
         };
+    }
+
+    private function getBranchMergeStatus(branch:String) : String
+    {
+        var dirtyMergedBranches = new Process("git", ["branch", "--merged"]).stdout.readAll().toString().split("\n");
+        var cleanMergedBranches = [for (dB in dirtyMergedBranches) StringTools.trim(dB)];
+
+        if (cleanMergedBranches.indexOf(branch) == -1) {
+            return "unmerged";
+        }
+
+        return "merged";
     }
 
     private function getCurrentBranch() : String
