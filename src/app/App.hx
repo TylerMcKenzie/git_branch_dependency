@@ -24,12 +24,12 @@ class App {
                         Sys.println(dependency);
                     }
                 case "status":
-                    Sys.println("Updating remotes");
+                    Sys.println("Checking for remote updates...");
                     updateRemotes();
 
                     checkDependencyRemoteStatus();
                 case "update":
-                    Sys.println("Updating remotes");
+                    Sys.println("Updating remotes...");
                     updateRemotes();
 
                     updateDependencyRemotes();
@@ -69,22 +69,19 @@ class App {
                 updateBranch(dep);
             }
 
-            preparedBranches.push(dep);
+            if (getBranchMergeStatus(dep) == "unmerged") {
+                preparedBranches.push(dep);
+            }
         }
 
         var gitPullArgs = ["pull", "origin"].concat(preparedBranches);
+        gitPullArgs.push("--no-ff");
         Sys.command("git", gitPullArgs);
     }
 
     private function updateBranch(branch:String) : Void
     {
         new Process("git", ["fetch", "origin", '$branch:$branch']).exitCode();
-    }
-
-    private function mergeBranch(branch:String) : Void
-    {
-        var originBranch = 'origin/$branch';
-        new Process("git", ["merge", originBranch, "--no-ff"]).exitCode(true);
     }
 
     private function checkDependencyRemoteStatus() : Void
