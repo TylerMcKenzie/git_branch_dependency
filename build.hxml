@@ -2,6 +2,7 @@
 -dce full
 
 -D haxeJSON
+-D staticStdLibs
 
 -cpp bin/cpp/main
 
