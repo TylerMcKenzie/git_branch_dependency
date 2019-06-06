@@ -81,14 +81,14 @@ class App {
             // If Octopus fails fall back to merging in order
             if (Sys.command("git", gitPullArgs) != 0) {
                 Sys.println("Falling back to indiviually merging dependencies.");
-                
+
                 for(branch in preparedBranches) {
                     if (Sys.command("git", ["pull", "origin", branch, "--no-ff"]) != 0) {
                         var diffFiles = new Process("git diff --diff-filter=UU --name-only").stdout.readAll().toString();
                         var unmergedFiles = [for (file in diffFiles.split("\n")) StringTools.trim(file)];
 
                         // Open default editor if one exists
-                        var editor = new Process("git config --global core.editor").stdout.readAll().toString();
+                        var editor = StringTools.trim(new Process("git config --global core.editor").stdout.readAll().toString());
 
                         if (editor.length > 0) {
                             if (Sys.command(editor, unmergedFiles) != 0) {
