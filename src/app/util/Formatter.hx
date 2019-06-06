@@ -3,11 +3,11 @@ package app.util;
 class Formatter {
     private static var CELL_PAD:Int = 2;
 
-    private var _displayColor:Bool = false;
-    private var _columnData:Array<Map<String, Dynamic>>;
+    private var _displayColor:Bool;
+    private var _columnData:Array<Int> = [];
 
 
-    public function new(?displayColor:Bool)
+    public function new(displayColor:Bool = false)
     {
         _displayColor = displayColor;
     }
@@ -15,24 +15,26 @@ class Formatter {
     public function printTable(headers:Array<String>, rows:Array<Array<String>>)
     {
         if (validateColumnCount(headers, rows) == false) {
-            throw "Each Row's column count must match the header count.";
+            Sys.println("Each Row's column count must match the header count.");
+            return;
         }
 
         // Get longest word for each column for column width
-        for (colIndex in 0...headers.length) {
-            var col = getRowColumnByIndex(colIndex, rows);
-            var colWidth = getLongestStringLength(col) + CELL_PAD*2;
-            _columnData[colIndex] = ["colWidth" => colWidth];
-        }
+        setColumnWidths(headers, rows);
 
         var formattedRows = [];
-        var formattedHeadersRow = getFormattedRowOutput(headers);
-        formattedRows.push(formattedHeadersRow);
+        var formattedHeaders = getFormattedRowOutput([for (h in headers) h.toUpperCase()]);
+        var divider = [for (i in 0...formattedHeaders.length) "-"].join("");
+
+        formattedRows.push(divider);
+        formattedRows.push(formattedHeaders);
+        formattedRows.push(divider);
 
         for (row in rows) {
-            var formattedRowString = getFormattedRowOutput(row);
-            formattedRows.push(formattedRowString);
+            formattedRows.push(getFormattedRowOutput(row));
         }
+
+        formattedRows.push(divider);
 
         for (formattedRow in formattedRows) {
             Sys.println(formattedRow);
@@ -43,7 +45,7 @@ class Formatter {
     {
         var formattedStringArray = [];
         for (colIndex in 0...row.length) {
-            var formattedString = getPadding() + row[colIndex] + getPadding((_columnData[colIndex].colWidth - (row[colIndex].length + CELL_PAD)));
+            var formattedString = getPadding() + row[colIndex] + getPadding((_columnData[colIndex] - (row[colIndex].length + CELL_PAD)));
             formattedStringArray.push(formattedString);
         }
         
@@ -53,11 +55,11 @@ class Formatter {
 
     private function getPadding(?length:Int) : String
     {
-        var padLen = length ? length : CELL_PAD;
+        var padLen = (length != null) ? length : CELL_PAD;
 
         var padding = "";
         for (i in 0...padLen) {
-            padding += "";
+            padding += " ";
         }
 
         return padding;
@@ -84,6 +86,16 @@ class Formatter {
         }
 
         return max;
+    }
+
+    private function setColumnWidths(headers:Array<String>, rows:Array<Array<String>>) : Void
+    {
+        for (colIndex in 0...headers.length) {
+            var col = getRowColumnByIndex(colIndex, rows);
+            var maxRowWidth = getLongestStringLength(col);
+            var maxWidth = (headers[colIndex].length > maxRowWidth) ? headers[colIndex].length : maxRowWidth;
+            _columnData[colIndex] = maxWidth + CELL_PAD*2;
+        }
     }
 
     private function validateColumnCount(headers:Array<Dynamic>, rows:Array<Array<Dynamic>>) : Bool
