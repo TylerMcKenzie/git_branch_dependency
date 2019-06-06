@@ -74,9 +74,44 @@ class App {
             }
         }
 
-        var gitPullArgs = ["pull", "origin"].concat(preparedBranches);
-        gitPullArgs.push("--no-ff");
-        Sys.command("git", gitPullArgs);
+        if (preparedBranches.length > 0) {
+            var gitPullArgs = ["pull", "origin"].concat(preparedBranches);
+            gitPullArgs.push("--no-ff");
+
+            // If Octopus fails fall back to merging in order
+            if (Sys.command("git", gitPullArgs) != 0) {
+                Sys.println("Falling back to indiviually merging dependencies.");
+                
+                new Process("git reset --hard").exitCode();
+
+                for(branch in preparedBranches) {
+                    if (Sys.command("git", ["pull", "origin", branch, "--no-ff"]) != 0) {
+                        var diffFiles = new Process("git diff --diff-filter=U --name-only").stdout.readAll().toString();
+
+                        var unmergedFiles = [];
+                        for (file in diffFiles.split("\n")) {
+                            if (file.length > 0) {
+                                unmergedFiles.push(StringTools.trim(file));
+                            }
+                        }
+
+                        // Open default editor if one exists
+                        var editor = StringTools.trim(new Process("git config --global core.editor").stdout.readAll().toString());
+
+                        if (editor.length > 0) {
+                            if (unmergedFiles.length > 0) {
+                                if (Sys.command(editor, unmergedFiles) != 0) {
+                                    Sys.println('An error occurred when opening \'${editor}\'');
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            Sys.println("Nothing updated.");
+        }
     }
 
     private function updateBranch(branch:String) : Void
