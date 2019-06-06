@@ -82,7 +82,7 @@ class App {
             if (Sys.command("git", gitPullArgs) != 0) {
                 Sys.println("Falling back to indiviually merging dependencies.");
                 
-                new Process("git reset --hard");
+                new Process("git reset --hard").exitCode();
 
                 for(branch in preparedBranches) {
                     if (Sys.command("git", ["pull", "origin", branch, "--no-ff"]) != 0) {
