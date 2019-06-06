@@ -34,18 +34,18 @@ HX_LOCAL_STACK_FRAME(_hx_pos_0f0f8a6702f060a3_59_updateDependencyRemotes,"app.Ap
 static const ::String _hx_array_data_2514e634_11[] = {
 	HX_("pull",c5,0b,61,4a),HX_("origin",e6,19,01,4b),
 };
-HX_LOCAL_STACK_FRAME(_hx_pos_0f0f8a6702f060a3_109_updateBranch,"app.App","updateBranch",0x1dfb7c05,"app.App.updateBranch","app/App.hx",109,0x9296abcb)
-HX_LOCAL_STACK_FRAME(_hx_pos_0f0f8a6702f060a3_113_checkDependencyRemoteStatus,"app.App","checkDependencyRemoteStatus",0x9ece2b71,"app.App.checkDependencyRemoteStatus","app/App.hx",113,0x9296abcb)
-HX_LOCAL_STACK_FRAME(_hx_pos_0f0f8a6702f060a3_130_getBranchRemoteStatus,"app.App","getBranchRemoteStatus",0x26326096,"app.App.getBranchRemoteStatus","app/App.hx",130,0x9296abcb)
-HX_LOCAL_STACK_FRAME(_hx_pos_0f0f8a6702f060a3_143_getBranchMergeStatus,"app.App","getBranchMergeStatus",0xa8d1a78c,"app.App.getBranchMergeStatus","app/App.hx",143,0x9296abcb)
+HX_LOCAL_STACK_FRAME(_hx_pos_0f0f8a6702f060a3_111_updateBranch,"app.App","updateBranch",0x1dfb7c05,"app.App.updateBranch","app/App.hx",111,0x9296abcb)
+HX_LOCAL_STACK_FRAME(_hx_pos_0f0f8a6702f060a3_115_checkDependencyRemoteStatus,"app.App","checkDependencyRemoteStatus",0x9ece2b71,"app.App.checkDependencyRemoteStatus","app/App.hx",115,0x9296abcb)
+HX_LOCAL_STACK_FRAME(_hx_pos_0f0f8a6702f060a3_132_getBranchRemoteStatus,"app.App","getBranchRemoteStatus",0x26326096,"app.App.getBranchRemoteStatus","app/App.hx",132,0x9296abcb)
+HX_LOCAL_STACK_FRAME(_hx_pos_0f0f8a6702f060a3_145_getBranchMergeStatus,"app.App","getBranchMergeStatus",0xa8d1a78c,"app.App.getBranchMergeStatus","app/App.hx",145,0x9296abcb)
 static const ::String _hx_array_data_2514e634_18[] = {
 	HX_("branch",a2,fe,18,13),HX_("--merged",0c,ae,2b,65),
 };
-HX_LOCAL_STACK_FRAME(_hx_pos_0f0f8a6702f060a3_155_getCurrentBranch,"app.App","getCurrentBranch",0x51bac4bf,"app.App.getCurrentBranch","app/App.hx",155,0x9296abcb)
+HX_LOCAL_STACK_FRAME(_hx_pos_0f0f8a6702f060a3_157_getCurrentBranch,"app.App","getCurrentBranch",0x51bac4bf,"app.App.getCurrentBranch","app/App.hx",157,0x9296abcb)
 static const ::String _hx_array_data_2514e634_20[] = {
 	HX_("rev-parse",89,52,b1,66),HX_("--abbrev-ref",48,a7,a8,ad),HX_("HEAD",20,f1,cb,2f),
 };
-HX_LOCAL_STACK_FRAME(_hx_pos_0f0f8a6702f060a3_168_updateRemotes,"app.App","updateRemotes",0x6e49d46a,"app.App.updateRemotes","app/App.hx",168,0x9296abcb)
+HX_LOCAL_STACK_FRAME(_hx_pos_0f0f8a6702f060a3_170_updateRemotes,"app.App","updateRemotes",0x6e49d46a,"app.App.updateRemotes","app/App.hx",170,0x9296abcb)
 static const ::String _hx_array_data_2514e634_22[] = {
 	HX_("remote",86,9a,88,04),HX_("update",09,86,05,87),
 };
@@ -172,29 +172,30 @@ HXLINE(  78)			::Array< ::String > gitPullArgs = ::Array_obj< ::String >::fromDa
 HXLINE(  79)			gitPullArgs->push(HX_("--no-ff",ac,19,ea,ec));
 HXLINE(  82)			if ((::Sys_obj::command(HX_("git",12,84,4e,00),gitPullArgs) != (int)0)) {
 HXLINE(  83)				::Sys_obj::println(HX_("Falling back to indiviually merging dependencies.",c5,6a,06,14));
-HXLINE(  85)				{
-HXLINE(  85)					int _g1 = (int)0;
-HXDLIN(  85)					while((_g1 < preparedBranches->length)){
-HXLINE(  85)						::String branch = preparedBranches->__get(_g1);
-HXDLIN(  85)						_g1 = (_g1 + (int)1);
-HXLINE(  86)						if ((::Sys_obj::command(HX_("git",12,84,4e,00),::Array_obj< ::String >::__new(4)->init(0,HX_("pull",c5,0b,61,4a))->init(1,HX_("origin",e6,19,01,4b))->init(2,branch)->init(3,HX_("--no-ff",ac,19,ea,ec))) != (int)0)) {
-HXLINE(  87)							::String diffFiles =  ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git diff --diff-filter=UU --name-only",58,3e,a4,dc),null())->_hx_stdout->readAll(null())->toString();
-HXLINE(  88)							::Array< ::String > _g11 = ::Array_obj< ::String >::__new(0);
-HXDLIN(  88)							{
-HXLINE(  88)								int _g2 = (int)0;
-HXDLIN(  88)								::Array< ::String > _g3 = diffFiles.split(HX_("\n",0a,00,00,00));
-HXDLIN(  88)								while((_g2 < _g3->length)){
-HXLINE(  88)									::String file = _g3->__get(_g2);
-HXDLIN(  88)									_g2 = (_g2 + (int)1);
-HXDLIN(  88)									_g11->push(::StringTools_obj::trim(file));
+HXLINE(  85)				 ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git reset --hard",4a,05,8a,31),null());
+HXLINE(  87)				{
+HXLINE(  87)					int _g1 = (int)0;
+HXDLIN(  87)					while((_g1 < preparedBranches->length)){
+HXLINE(  87)						::String branch = preparedBranches->__get(_g1);
+HXDLIN(  87)						_g1 = (_g1 + (int)1);
+HXLINE(  88)						if ((::Sys_obj::command(HX_("git",12,84,4e,00),::Array_obj< ::String >::__new(4)->init(0,HX_("pull",c5,0b,61,4a))->init(1,HX_("origin",e6,19,01,4b))->init(2,branch)->init(3,HX_("--no-ff",ac,19,ea,ec))) != (int)0)) {
+HXLINE(  89)							::String diffFiles =  ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git diff --diff-filter=UU --name-only",58,3e,a4,dc),null())->_hx_stdout->readAll(null())->toString();
+HXLINE(  90)							::Array< ::String > _g11 = ::Array_obj< ::String >::__new(0);
+HXDLIN(  90)							{
+HXLINE(  90)								int _g2 = (int)0;
+HXDLIN(  90)								::Array< ::String > _g3 = diffFiles.split(HX_("\n",0a,00,00,00));
+HXDLIN(  90)								while((_g2 < _g3->length)){
+HXLINE(  90)									::String file = _g3->__get(_g2);
+HXDLIN(  90)									_g2 = (_g2 + (int)1);
+HXDLIN(  90)									_g11->push(::StringTools_obj::trim(file));
             								}
             							}
-HXDLIN(  88)							::Array< ::String > unmergedFiles = _g11;
-HXLINE(  91)							::String editor = ::StringTools_obj::trim( ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git config --global core.editor",0f,e7,57,b7),null())->_hx_stdout->readAll(null())->toString());
-HXLINE(  93)							if ((editor.length > (int)0)) {
-HXLINE(  94)								if ((::Sys_obj::command(editor,unmergedFiles) != (int)0)) {
-HXLINE(  95)									::Sys_obj::println(((HX_("An error occurred when opening '",a9,fd,66,4c) + editor) + HX_("'",27,00,00,00)));
-HXLINE(  96)									return;
+HXDLIN(  90)							::Array< ::String > unmergedFiles = _g11;
+HXLINE(  93)							::String editor = ::StringTools_obj::trim( ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git config --global core.editor",0f,e7,57,b7),null())->_hx_stdout->readAll(null())->toString());
+HXLINE(  95)							if ((editor.length > (int)0)) {
+HXLINE(  96)								if ((::Sys_obj::command(editor,unmergedFiles) != (int)0)) {
+HXLINE(  97)									::Sys_obj::println(((HX_("An error occurred when opening '",a9,fd,66,4c) + editor) + HX_("'",27,00,00,00)));
+HXLINE(  98)									return;
             								}
             							}
             						}
@@ -203,7 +204,7 @@ HXLINE(  96)									return;
             			}
             		}
             		else {
-HXLINE( 103)			::Sys_obj::println(HX_("Nothing updated.",26,28,b7,61));
+HXLINE( 105)			::Sys_obj::println(HX_("Nothing updated.",26,28,b7,61));
             		}
             	}
 
@@ -211,35 +212,35 @@ HXLINE( 103)			::Sys_obj::println(HX_("Nothing updated.",26,28,b7,61));
 HX_DEFINE_DYNAMIC_FUNC0(App_obj,updateDependencyRemotes,(void))
 
 void App_obj::updateBranch(::String branch){
-            	HX_GC_STACKFRAME(&_hx_pos_0f0f8a6702f060a3_109_updateBranch)
-HXDLIN( 109)		 ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git",12,84,4e,00),::Array_obj< ::String >::__new(3)->init(0,HX_("fetch",3a,14,fa,fd))->init(1,HX_("origin",e6,19,01,4b))->init(2,(((HX_("",00,00,00,00) + branch) + HX_(":",3a,00,00,00)) + branch)))->exitCode(null());
+            	HX_GC_STACKFRAME(&_hx_pos_0f0f8a6702f060a3_111_updateBranch)
+HXDLIN( 111)		 ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git",12,84,4e,00),::Array_obj< ::String >::__new(3)->init(0,HX_("fetch",3a,14,fa,fd))->init(1,HX_("origin",e6,19,01,4b))->init(2,(((HX_("",00,00,00,00) + branch) + HX_(":",3a,00,00,00)) + branch)))->exitCode(null());
             	}
 
 
 HX_DEFINE_DYNAMIC_FUNC1(App_obj,updateBranch,(void))
 
 void App_obj::checkDependencyRemoteStatus(){
-            	HX_STACKFRAME(&_hx_pos_0f0f8a6702f060a3_113_checkDependencyRemoteStatus)
-HXLINE( 114)		::Array< ::String > deps = this->dependencyModel->getDependencies();
-HXLINE( 116)		{
-HXLINE( 116)			int _g = (int)0;
-HXDLIN( 116)			while((_g < deps->length)){
-HXLINE( 116)				::String dep = deps->__get(_g);
-HXDLIN( 116)				_g = (_g + (int)1);
-HXLINE( 117)				 ::Dynamic status = this->getBranchRemoteStatus(dep);
-HXLINE( 119)				::String mergedStatus = this->getBranchMergeStatus(dep);
-HXLINE( 121)				bool _hx_tmp;
-HXDLIN( 121)				if (hx::IsLessEq( ::Std_obj::parseInt(( (::String)(status->__Field(HX_("ahead",01,6e,e9,1e),hx::paccDynamic)) )),(int)0 )) {
-HXLINE( 121)					_hx_tmp = hx::IsGreater( ::Std_obj::parseInt(( (::String)(status->__Field(HX_("behind",ba,30,80,9b),hx::paccDynamic)) )),(int)0 );
+            	HX_STACKFRAME(&_hx_pos_0f0f8a6702f060a3_115_checkDependencyRemoteStatus)
+HXLINE( 116)		::Array< ::String > deps = this->dependencyModel->getDependencies();
+HXLINE( 118)		{
+HXLINE( 118)			int _g = (int)0;
+HXDLIN( 118)			while((_g < deps->length)){
+HXLINE( 118)				::String dep = deps->__get(_g);
+HXDLIN( 118)				_g = (_g + (int)1);
+HXLINE( 119)				 ::Dynamic status = this->getBranchRemoteStatus(dep);
+HXLINE( 121)				::String mergedStatus = this->getBranchMergeStatus(dep);
+HXLINE( 123)				bool _hx_tmp;
+HXDLIN( 123)				if (hx::IsLessEq( ::Std_obj::parseInt(( (::String)(status->__Field(HX_("ahead",01,6e,e9,1e),hx::paccDynamic)) )),(int)0 )) {
+HXLINE( 123)					_hx_tmp = hx::IsGreater( ::Std_obj::parseInt(( (::String)(status->__Field(HX_("behind",ba,30,80,9b),hx::paccDynamic)) )),(int)0 );
             				}
             				else {
-HXLINE( 121)					_hx_tmp = true;
+HXLINE( 123)					_hx_tmp = true;
             				}
-HXDLIN( 121)				if (_hx_tmp) {
-HXLINE( 122)					::Sys_obj::println((((((((HX_("(",28,00,00,00) + dep) + HX_(") Remote: [ahead ",57,ca,a4,83)) + ( (::String)(status->__Field(HX_("ahead",01,6e,e9,1e),hx::paccDynamic)) )) + HX_(", behind ",32,c2,76,dc)) + ( (::String)(status->__Field(HX_("behind",ba,30,80,9b),hx::paccDynamic)) )) + HX_("] Local: ",ee,fd,18,c3)) + mergedStatus));
+HXDLIN( 123)				if (_hx_tmp) {
+HXLINE( 124)					::Sys_obj::println((((((((HX_("(",28,00,00,00) + dep) + HX_(") Remote: [ahead ",57,ca,a4,83)) + ( (::String)(status->__Field(HX_("ahead",01,6e,e9,1e),hx::paccDynamic)) )) + HX_(", behind ",32,c2,76,dc)) + ( (::String)(status->__Field(HX_("behind",ba,30,80,9b),hx::paccDynamic)) )) + HX_("] Local: ",ee,fd,18,c3)) + mergedStatus));
             				}
             				else {
-HXLINE( 124)					::Sys_obj::println((((HX_("(",28,00,00,00) + dep) + HX_(") Remote: [up to date] Local: ",a8,19,59,fc)) + mergedStatus));
+HXLINE( 126)					::Sys_obj::println((((HX_("(",28,00,00,00) + dep) + HX_(") Remote: [up to date] Local: ",a8,19,59,fc)) + mergedStatus));
             				}
             			}
             		}
@@ -249,11 +250,11 @@ HXLINE( 124)					::Sys_obj::println((((HX_("(",28,00,00,00) + dep) + HX_(") Remo
 HX_DEFINE_DYNAMIC_FUNC0(App_obj,checkDependencyRemoteStatus,(void))
 
  ::Dynamic App_obj::getBranchRemoteStatus(::String branch){
-            	HX_GC_STACKFRAME(&_hx_pos_0f0f8a6702f060a3_130_getBranchRemoteStatus)
-HXLINE( 131)		::String branchToOrigin = (((HX_("",00,00,00,00) + branch) + HX_("...origin/",5b,79,c8,11)) + branch);
-HXLINE( 133)		::String ahead = ::StringTools_obj::trim( ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git",12,84,4e,00),::Array_obj< ::String >::__new(4)->init(0,HX_("rev-list",c8,76,46,3f))->init(1,HX_("--left-only",52,0b,9d,28))->init(2,HX_("--count",6f,61,b8,97))->init(3,branchToOrigin))->_hx_stdout->readAll(null())->toString());
-HXLINE( 134)		::String behind = ::StringTools_obj::trim( ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git",12,84,4e,00),::Array_obj< ::String >::__new(4)->init(0,HX_("rev-list",c8,76,46,3f))->init(1,HX_("--right-only",1d,36,11,d8))->init(2,HX_("--count",6f,61,b8,97))->init(3,branchToOrigin))->_hx_stdout->readAll(null())->toString());
-HXLINE( 136)		return  ::Dynamic(hx::Anon_obj::Create(2)
+            	HX_GC_STACKFRAME(&_hx_pos_0f0f8a6702f060a3_132_getBranchRemoteStatus)
+HXLINE( 133)		::String branchToOrigin = (((HX_("",00,00,00,00) + branch) + HX_("...origin/",5b,79,c8,11)) + branch);
+HXLINE( 135)		::String ahead = ::StringTools_obj::trim( ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git",12,84,4e,00),::Array_obj< ::String >::__new(4)->init(0,HX_("rev-list",c8,76,46,3f))->init(1,HX_("--left-only",52,0b,9d,28))->init(2,HX_("--count",6f,61,b8,97))->init(3,branchToOrigin))->_hx_stdout->readAll(null())->toString());
+HXLINE( 136)		::String behind = ::StringTools_obj::trim( ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git",12,84,4e,00),::Array_obj< ::String >::__new(4)->init(0,HX_("rev-list",c8,76,46,3f))->init(1,HX_("--right-only",1d,36,11,d8))->init(2,HX_("--count",6f,61,b8,97))->init(3,branchToOrigin))->_hx_stdout->readAll(null())->toString());
+HXLINE( 138)		return  ::Dynamic(hx::Anon_obj::Create(2)
             			->setFixed(0,HX_("behind",ba,30,80,9b),behind)
             			->setFixed(1,HX_("ahead",01,6e,e9,1e),ahead));
             	}
@@ -262,41 +263,41 @@ HXLINE( 136)		return  ::Dynamic(hx::Anon_obj::Create(2)
 HX_DEFINE_DYNAMIC_FUNC1(App_obj,getBranchRemoteStatus,return )
 
 ::String App_obj::getBranchMergeStatus(::String branch){
-            	HX_GC_STACKFRAME(&_hx_pos_0f0f8a6702f060a3_143_getBranchMergeStatus)
-HXLINE( 144)		::Array< ::String > dirtyMergedBranches =  ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git",12,84,4e,00),::Array_obj< ::String >::fromData( _hx_array_data_2514e634_18,2))->_hx_stdout->readAll(null())->toString().split(HX_("\n",0a,00,00,00));
-HXLINE( 145)		::Array< ::String > _g = ::Array_obj< ::String >::__new(0);
-HXDLIN( 145)		{
-HXLINE( 145)			int _g1 = (int)0;
-HXDLIN( 145)			while((_g1 < dirtyMergedBranches->length)){
-HXLINE( 145)				::String dB = dirtyMergedBranches->__get(_g1);
-HXDLIN( 145)				_g1 = (_g1 + (int)1);
-HXDLIN( 145)				_g->push(::StringTools_obj::trim(dB));
+            	HX_GC_STACKFRAME(&_hx_pos_0f0f8a6702f060a3_145_getBranchMergeStatus)
+HXLINE( 146)		::Array< ::String > dirtyMergedBranches =  ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git",12,84,4e,00),::Array_obj< ::String >::fromData( _hx_array_data_2514e634_18,2))->_hx_stdout->readAll(null())->toString().split(HX_("\n",0a,00,00,00));
+HXLINE( 147)		::Array< ::String > _g = ::Array_obj< ::String >::__new(0);
+HXDLIN( 147)		{
+HXLINE( 147)			int _g1 = (int)0;
+HXDLIN( 147)			while((_g1 < dirtyMergedBranches->length)){
+HXLINE( 147)				::String dB = dirtyMergedBranches->__get(_g1);
+HXDLIN( 147)				_g1 = (_g1 + (int)1);
+HXDLIN( 147)				_g->push(::StringTools_obj::trim(dB));
             			}
             		}
-HXDLIN( 145)		::Array< ::String > cleanMergedBranches = _g;
-HXLINE( 147)		if ((cleanMergedBranches->indexOf(branch,null()) == (int)-1)) {
-HXLINE( 148)			return HX_("unmerged",c5,ed,4e,0a);
+HXDLIN( 147)		::Array< ::String > cleanMergedBranches = _g;
+HXLINE( 149)		if ((cleanMergedBranches->indexOf(branch,null()) == (int)-1)) {
+HXLINE( 150)			return HX_("unmerged",c5,ed,4e,0a);
             		}
-HXLINE( 151)		return HX_("merged",ac,be,07,08);
+HXLINE( 153)		return HX_("merged",ac,be,07,08);
             	}
 
 
 HX_DEFINE_DYNAMIC_FUNC1(App_obj,getBranchMergeStatus,return )
 
 ::String App_obj::getCurrentBranch(){
-            	HX_GC_STACKFRAME(&_hx_pos_0f0f8a6702f060a3_155_getCurrentBranch)
-HXLINE( 156)		 ::sys::io::Process process =  ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git",12,84,4e,00),::Array_obj< ::String >::fromData( _hx_array_data_2514e634_20,3));
-HXLINE( 158)		process->exitCode(null());
-HXLINE( 160)		::String b = ::StringTools_obj::trim(process->_hx_stdout->readAll(null())->toString());
-HXLINE( 162)		return b;
+            	HX_GC_STACKFRAME(&_hx_pos_0f0f8a6702f060a3_157_getCurrentBranch)
+HXLINE( 158)		 ::sys::io::Process process =  ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git",12,84,4e,00),::Array_obj< ::String >::fromData( _hx_array_data_2514e634_20,3));
+HXLINE( 160)		process->exitCode(null());
+HXLINE( 162)		::String b = ::StringTools_obj::trim(process->_hx_stdout->readAll(null())->toString());
+HXLINE( 164)		return b;
             	}
 
 
 HX_DEFINE_DYNAMIC_FUNC0(App_obj,getCurrentBranch,return )
 
 void App_obj::updateRemotes(){
-            	HX_GC_STACKFRAME(&_hx_pos_0f0f8a6702f060a3_168_updateRemotes)
-HXDLIN( 168)		 ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git",12,84,4e,00),::Array_obj< ::String >::fromData( _hx_array_data_2514e634_22,2))->exitCode(null());
+            	HX_GC_STACKFRAME(&_hx_pos_0f0f8a6702f060a3_170_updateRemotes)
+HXDLIN( 170)		 ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git",12,84,4e,00),::Array_obj< ::String >::fromData( _hx_array_data_2514e634_22,2))->exitCode(null());
             	}
 
 

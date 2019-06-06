@@ -81,6 +81,8 @@ class App {
             // If Octopus fails fall back to merging in order
             if (Sys.command("git", gitPullArgs) != 0) {
                 Sys.println("Falling back to indiviually merging dependencies.");
+                
+                new Process("git reset --hard");
 
                 for(branch in preparedBranches) {
                     if (Sys.command("git", ["pull", "origin", branch, "--no-ff"]) != 0) {
