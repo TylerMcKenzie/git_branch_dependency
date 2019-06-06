@@ -172,7 +172,7 @@ HXLINE(  78)			::Array< ::String > gitPullArgs = ::Array_obj< ::String >::fromDa
 HXLINE(  79)			gitPullArgs->push(HX_("--no-ff",ac,19,ea,ec));
 HXLINE(  82)			if ((::Sys_obj::command(HX_("git",12,84,4e,00),gitPullArgs) != (int)0)) {
 HXLINE(  83)				::Sys_obj::println(HX_("Falling back to indiviually merging dependencies.",c5,6a,06,14));
-HXLINE(  85)				 ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git reset --hard",4a,05,8a,31),null());
+HXLINE(  85)				 ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git reset --hard",4a,05,8a,31),null())->exitCode(null());
 HXLINE(  87)				{
 HXLINE(  87)					int _g1 = (int)0;
 HXDLIN(  87)					while((_g1 < preparedBranches->length)){
