@@ -16,6 +16,7 @@
 "obj/linux64/80c0ed55_JsonParser.o"
 "obj/linux64/189e2d78_StringMap.o"
 "obj/linux64/f84b96e9_Utf8.o"
+"obj/linux64/f84b96e9_Log.o"
 "obj/linux64/f84b96e9_IMap.o"
 "obj/linux64/7e09aefd_DependencyModel.o"
 "obj/linux64/c2a50ab4_App.o"

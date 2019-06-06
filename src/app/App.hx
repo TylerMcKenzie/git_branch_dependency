@@ -86,9 +86,10 @@ class App {
 
                 for(branch in preparedBranches) {
                     if (Sys.command("git", ["pull", "origin", branch, "--no-ff"]) != 0) {
-                        var diffFiles = new Process("git diff --diff-filter=UU --name-only").stdout.readAll().toString();
+                        var diffFiles = new Process("git diff --diff-filter=U --name-only").stdout.readAll().toString();
                         var unmergedFiles = [for (file in diffFiles.split("\n")) StringTools.trim(file)];
-
+                        trace(unmergedFiles);
+                        return;
                         // Open default editor if one exists
                         var editor = StringTools.trim(new Process("git config --global core.editor").stdout.readAll().toString());
 
