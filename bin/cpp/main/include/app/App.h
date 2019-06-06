@@ -8,6 +8,7 @@
 
 HX_DECLARE_CLASS1(app,App)
 HX_DECLARE_CLASS2(app,model,DependencyModel)
+HX_DECLARE_CLASS2(app,util,Formatter)
 
 namespace app{
 
@@ -45,6 +46,7 @@ class HXCPP_CLASS_ATTRIBUTES App_obj : public hx::Object
 		::String __ToString() const { return HX_HCSTRING("App","\x81","\xb4","\x31","\x00"); }
 
 		 ::app::model::DependencyModel dependencyModel;
+		 ::app::util::Formatter formatter;
 		void run();
 		::Dynamic run_dyn();
 

@@ -30,6 +30,7 @@ const char *__hxcpp_all_files[] = {
 "Main.hx",
 "app/App.hx",
 "app/model/DependencyModel.hx",
+"app/util/Formatter.hx",
 #endif
  0 };
 
@@ -61,6 +62,7 @@ const char *__hxcpp_all_files_fullpath[] = {
 "/home/vagrant/code/release/tyler-stuff/haxe/haxe_cmd/git_branch_dependency/src/Main.hx",
 "/home/vagrant/code/release/tyler-stuff/haxe/haxe_cmd/git_branch_dependency/src/app/App.hx",
 "/home/vagrant/code/release/tyler-stuff/haxe/haxe_cmd/git_branch_dependency/src/app/model/DependencyModel.hx",
+"/home/vagrant/code/release/tyler-stuff/haxe/haxe_cmd/git_branch_dependency/src/app/util/Formatter.hx",
 #endif
  0 };
 
@@ -76,6 +78,7 @@ const char *__hxcpp_all_classes[] = {
 "Type",
 "app.App",
 "app.model.DependencyModel",
+"app.util.Formatter",
 "haxe.Utf8",
 "haxe.ds.StringMap",
 "haxe.format.JsonParser",

@@ -7,6 +7,9 @@
 #ifndef INCLUDED_ValueType
 #include <ValueType.h>
 #endif
+#ifndef INCLUDED_app_util_Formatter
+#include <app/util/Formatter.h>
+#endif
 #ifndef INCLUDED_StringTools
 #include <StringTools.h>
 #endif
@@ -100,6 +103,7 @@ __files__boot();
 hx::RegisterResources( hx::GetResources() );
 ::haxe::io::Error_obj::__register();
 ::ValueType_obj::__register();
+::app::util::Formatter_obj::__register();
 ::StringTools_obj::__register();
 ::sys::io::Process_obj::__register();
 ::sys::io::_Process::Stdout_obj::__register();
@@ -131,5 +135,6 @@ hx::RegisterResources( hx::GetResources() );
 ::haxe::io::Error_obj::__boot();
 ::ValueType_obj::__boot();
 ::StringTools_obj::__boot();
+::app::util::Formatter_obj::__boot();
 }
 

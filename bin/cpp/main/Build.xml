@@ -99,6 +99,10 @@
   <file name="src/haxe/IMap.cpp" >
    <depend name="include/haxe/IMap.h"/>
   </file>
+  <file name="src/app/util/Formatter.cpp" >
+   <depend name="include/Sys.h"/>
+   <depend name="include/app/util/Formatter.h"/>
+  </file>
   <file name="src/app/model/DependencyModel.cpp" >
    <depend name="include/Reflect.h"/>
    <depend name="include/StringTools.h"/>
@@ -117,6 +121,7 @@
    <depend name="include/Sys.h"/>
    <depend name="include/app/App.h"/>
    <depend name="include/app/model/DependencyModel.h"/>
+   <depend name="include/app/util/Formatter.h"/>
    <depend name="include/haxe/io/Bytes.h"/>
    <depend name="include/haxe/io/Input.h"/>
    <depend name="include/sys/io/Process.h"/>
@@ -157,6 +162,7 @@
   <file name="src/__boot__.cpp" >
    <depend name="include/haxe/io/Error.h"/>
    <depend name="include/ValueType.h"/>
+   <depend name="include/app/util/Formatter.h"/>
    <depend name="include/StringTools.h"/>
   </file>
   <file name="src/__files__.cpp" if='HXCPP_DEBUGGER'>
