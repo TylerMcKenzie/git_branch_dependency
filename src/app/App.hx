@@ -99,9 +99,11 @@ class App {
                         var editor = StringTools.trim(new Process("git config --global core.editor").stdout.readAll().toString());
 
                         if (editor.length > 0) {
-                            if (Sys.command(editor, unmergedFiles) != 0) {
-                                Sys.println('An error occurred when opening \'${editor}\'');
-                                return;
+                            if (unmergedFiles.length > 0) {
+                                if (Sys.command(editor, unmergedFiles) != 0) {
+                                    Sys.println('An error occurred when opening \'${editor}\'');
+                                    return;
+                                }
                             }
                         }
                     }
