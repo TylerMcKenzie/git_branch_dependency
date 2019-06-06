@@ -190,7 +190,7 @@ HXDLIN(  88)									_g11->push(::StringTools_obj::trim(file));
             								}
             							}
 HXDLIN(  88)							::Array< ::String > unmergedFiles = _g11;
-HXLINE(  91)							::String editor =  ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git config --global core.editor",0f,e7,57,b7),null())->_hx_stdout->readAll(null())->toString();
+HXLINE(  91)							::String editor = ::StringTools_obj::trim( ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git config --global core.editor",0f,e7,57,b7),null())->_hx_stdout->readAll(null())->toString());
 HXLINE(  93)							if ((editor.length > (int)0)) {
 HXLINE(  94)								if ((::Sys_obj::command(editor,unmergedFiles) != (int)0)) {
 HXLINE(  95)									::Sys_obj::println(((HX_("An error occurred when opening '",a9,fd,66,4c) + editor) + HX_("'",27,00,00,00)));
