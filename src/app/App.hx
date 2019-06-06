@@ -1,13 +1,18 @@
 package app;
 
 import app.model.DependencyModel;
+import app.util.Formatter;
+
 import sys.io.Process;
 
 class App {
-    private var dependencyModel:DependencyModel = new DependencyModel();
+    private var dependencyModel:DependencyModel;
+    private var formatter:Formatter;
 
     public function new()
     {
+        formatter = new Formatter();
+        dependencyModel = new DependencyModel();
         dependencyModel.loadDependencies(getCurrentBranch());
     }
 
@@ -123,17 +128,21 @@ class App {
     {
         var deps = dependencyModel.getDependencies();
 
+        var branchRows = [];
         for(dep in deps) {
             var status = getBranchRemoteStatus(dep);
 
             var mergedStatus = getBranchMergeStatus(dep);
 
-            if (Std.parseInt(status.ahead) > 0 || Std.parseInt(status.behind) > 0) {
-                Sys.println('(${dep}) Remote: [ahead ${status.ahead}, behind ${status.behind}] Local: ${mergedStatus}');
-            } else {
-                Sys.println('(${dep}) Remote: [up to date] Local: ${mergedStatus}');
-            }
+            // if (Std.parseInt(status.ahead) > 0 || Std.parseInt(status.behind) > 0) {
+            //     Sys.println('(${dep}) Remote: [ahead ${status.ahead}, behind ${status.behind}] Local: ${mergedStatus}');
+            // } else {
+            //     Sys.println('(${dep}) Remote: [up to date] Local: ${mergedStatus}');
+            // }
+            branchRows.push([dep, status.ahead, status.behind, mergedStatus]);
         }
+
+        formatter.printTable(["branch", "ahead", "behind", "status"], branchRows);
     }
 
     private function getBranchRemoteStatus(branch:String) : Dynamic
