@@ -74,12 +74,14 @@ class App {
             }
         }
 
-        if (preparedBranches.length) {
+        if (preparedBranches.length > 0) {
             var gitPullArgs = ["pull", "origin"].concat(preparedBranches);
             gitPullArgs.push("--no-ff");
 
             // If Octopus fails fall back to merging in order
             if (Sys.command("git", gitPullArgs) != 0) {
+                Sys.println("Falling back to indiviually merging dependencies.");
+                
                 for(branch in preparedBranches) {
                     if (Sys.command("git", ["pull", "origin", branch, "--no-ff"]) != 0) {
                         var diffFiles = new Process("git diff --diff-filter=UU --name-only").stdout.readAll().toString();
@@ -88,7 +90,7 @@ class App {
                         // Open default editor if one exists
                         var editor = new Process("git config --global core.editor").stdout.readAll().toString();
 
-                        if (editor.length) {
+                        if (editor.length > 0) {
                             if (Sys.command(editor, unmergedFiles) != 0) {
                                 Sys.println('An error occurred when opening \'${editor}\'');
                                 return;
