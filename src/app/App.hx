@@ -44,6 +44,9 @@ class App {
                 case "-d":
                     var dep = args[i+1];
                     removeDependency(dep);
+                case "-h":
+                    outputHelp();
+                    break;
             }
         }
     }
@@ -185,5 +188,31 @@ class App {
     {
         // This updates remotes to get accurate checks
         new Process("git", ["remote", "update"]).exitCode();
+    }
+
+    private function outputHelp() : Void
+    {
+        Sys.println("GIT-DEPENDENCY");
+        Sys.println("");
+        Sys.println("NAME");
+        Sys.println("    git-dependency - Manages branches as dependencies for complex features.");
+        Sys.println("");
+        Sys.println("SYNOPSIS");
+        Sys.println("    git dependency [-a <branch>] [-d <branch>] [-h]");
+        Sys.println("                   [update] [status] [list]");
+        Sys.println("");
+        Sys.println("OPTIONS");
+        Sys.println("    -a");
+        Sys.println("        add a branch as a dependency.");
+        Sys.println("    -d");
+        Sys.println("        remove a branch from the dependency list.");
+        Sys.println("    -h");
+        Sys.println("        display help.");
+        Sys.println("    update");
+        Sys.println("        attempts to pull in dependencies with an octopus merge. If the merge fails it will fallback to individual merge/conflict resolution.");
+        Sys.println("    status");
+        Sys.println("        checks to see if there are any changes between the current HEAD and the branches dependencies and outputs a table with those changes.");
+        Sys.println("    list");
+        Sys.println("        list dependencies for the current branch.");
     }
 }
