@@ -72,8 +72,8 @@ class HXCPP_CLASS_ATTRIBUTES App_obj : public hx::Object
 		::String getBranchMergeStatus(::String branch);
 		::Dynamic getBranchMergeStatus_dyn();
 
-		::String getCurrentBranch();
-		::Dynamic getCurrentBranch_dyn();
+		::String loadCurrentBranch();
+		::Dynamic loadCurrentBranch_dyn();
 
 		void updateRemotes();
 		::Dynamic updateRemotes_dyn();

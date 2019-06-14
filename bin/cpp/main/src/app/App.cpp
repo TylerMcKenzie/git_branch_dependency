@@ -47,7 +47,7 @@ HX_LOCAL_STACK_FRAME(_hx_pos_0f0f8a6702f060a3_184_getBranchMergeStatus,"app.App"
 static const ::String _hx_array_data_2514e634_19[] = {
 	HX_("branch",a2,fe,18,13),HX_("--merged",0c,ae,2b,65),
 };
-HX_LOCAL_STACK_FRAME(_hx_pos_0f0f8a6702f060a3_196_getCurrentBranch,"app.App","getCurrentBranch",0x51bac4bf,"app.App.getCurrentBranch","app/App.hx",196,0x9296abcb)
+HX_LOCAL_STACK_FRAME(_hx_pos_0f0f8a6702f060a3_196_loadCurrentBranch,"app.App","loadCurrentBranch",0x6913c4fb,"app.App.loadCurrentBranch","app/App.hx",196,0x9296abcb)
 static const ::String _hx_array_data_2514e634_21[] = {
 	HX_("rev-parse",89,52,b1,66),HX_("--abbrev-ref",48,a7,a8,ad),HX_("HEAD",20,f1,cb,2f),
 };
@@ -60,7 +60,7 @@ namespace app{
 
 void App_obj::__construct(){
             	HX_GC_STACKFRAME(&_hx_pos_0f0f8a6702f060a3_34_new)
-HXLINE(  35)		this->currentBranch = this->getCurrentBranch();
+HXLINE(  35)		this->currentBranch = this->loadCurrentBranch();
 HXLINE(  36)		this->formatter =  ::app::util::Formatter_obj::__alloc( HX_CTX ,null());
 HXLINE(  37)		this->dependencyModel =  ::app::model::DependencyModel_obj::__alloc( HX_CTX );
 HXLINE(  38)		this->dependencyModel->loadDependencies(this->currentBranch);
@@ -293,8 +293,8 @@ HXLINE( 192)		return HX_("merged",ac,be,07,08);
 
 HX_DEFINE_DYNAMIC_FUNC1(App_obj,getBranchMergeStatus,return )
 
-::String App_obj::getCurrentBranch(){
-            	HX_GC_STACKFRAME(&_hx_pos_0f0f8a6702f060a3_196_getCurrentBranch)
+::String App_obj::loadCurrentBranch(){
+            	HX_GC_STACKFRAME(&_hx_pos_0f0f8a6702f060a3_196_loadCurrentBranch)
 HXLINE( 197)		 ::sys::io::Process process =  ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git",12,84,4e,00),::Array_obj< ::String >::fromData( _hx_array_data_2514e634_21,3));
 HXLINE( 199)		process->exitCode(null());
 HXLINE( 201)		::String b = ::StringTools_obj::trim(process->_hx_stdout->readAll(null())->toString());
@@ -302,7 +302,7 @@ HXLINE( 203)		return b;
             	}
 
 
-HX_DEFINE_DYNAMIC_FUNC0(App_obj,getCurrentBranch,return )
+HX_DEFINE_DYNAMIC_FUNC0(App_obj,loadCurrentBranch,return )
 
 void App_obj::updateRemotes(){
             	HX_GC_STACKFRAME(&_hx_pos_0f0f8a6702f060a3_209_updateRemotes)
@@ -400,7 +400,9 @@ hx::Val App_obj::__Field(const ::String &inName,hx::PropertyAccess inCallProp)
 		break;
 	case 16:
 		if (HX_FIELD_EQ(inName,"removeDependency") ) { return hx::Val( removeDependency_dyn() ); }
-		if (HX_FIELD_EQ(inName,"getCurrentBranch") ) { return hx::Val( getCurrentBranch_dyn() ); }
+		break;
+	case 17:
+		if (HX_FIELD_EQ(inName,"loadCurrentBranch") ) { return hx::Val( loadCurrentBranch_dyn() ); }
 		break;
 	case 20:
 		if (HX_FIELD_EQ(inName,"getBranchMergeStatus") ) { return hx::Val( getBranchMergeStatus_dyn() ); }
@@ -462,7 +464,7 @@ static ::String App_obj_sMemberFields[] = {
 	HX_HCSTRING("checkDependencyRemoteStatus","\xab","\xa8","\xd8","\x48"),
 	HX_HCSTRING("getBranchRemoteStatus","\x50","\xd6","\x5e","\xa1"),
 	HX_HCSTRING("getBranchMergeStatus","\x12","\xc7","\xe0","\xfa"),
-	HX_HCSTRING("getCurrentBranch","\x45","\x29","\x96","\x60"),
+	HX_HCSTRING("loadCurrentBranch","\xb5","\x55","\x30","\x5a"),
 	HX_HCSTRING("updateRemotes","\x24","\x00","\x6d","\xbe"),
 	HX_HCSTRING("outputHelp","\x62","\x82","\xff","\xa6"),
 	::String(null()) };
