@@ -32,7 +32,7 @@ class App {
 
     public function new()
     {
-        currentBranch = getCurrentBranch();
+        currentBranch = loadCurrentBranch();
         formatter = new Formatter();
         dependencyModel = new DependencyModel();
         dependencyModel.loadDependencies(currentBranch);
@@ -45,7 +45,7 @@ class App {
         for (i in 0...args.length) {
             switch args[i] {
                 case LIST_L | LIST_S:
-                    Sys.println('Showing dependencies for [$currentBranch]:');
+                    Sys.println('Showing dependencies for [${currentBranch}]:');
                     for (dependency in dependencyModel.getDependencies()) {
                         Sys.println(dependency);
                     }
@@ -192,7 +192,7 @@ class App {
         return "merged";
     }
 
-    private function getCurrentBranch() : String
+    private function loadCurrentBranch() : String
     {
         var process = new Process("git", ["rev-parse", "--abbrev-ref", "HEAD"]);
 
