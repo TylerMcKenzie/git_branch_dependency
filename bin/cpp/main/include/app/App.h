@@ -47,6 +47,7 @@ class HXCPP_CLASS_ATTRIBUTES App_obj : public hx::Object
 
 		 ::app::model::DependencyModel dependencyModel;
 		 ::app::util::Formatter formatter;
+		::String currentBranch;
 		void run();
 		::Dynamic run_dyn();
 

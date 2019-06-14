@@ -44,37 +44,31 @@ class App {
 
         for (i in 0...args.length) {
             switch args[i] {
-                case LIST_L:
-                case LIST_S:
+                case LIST_L | LIST_S:
                     Sys.println('Showing dependencies for [$currentBranch]:');
                     for (dependency in dependencyModel.getDependencies()) {
                         Sys.println(dependency);
                     }
                     break;
-                case STATUS_L:
-                case STATUS_S:
+                case STATUS_L | STATUS_S:
                     Sys.println("Checking for remote updates...");
                     updateRemotes();
 
                     checkDependencyRemoteStatus();
                     break;
-                case UPDATE_L:
-                case UPDATE_S:
+                case UPDATE_L | UPDATE_S:
                     Sys.println("Updating remotes...");
                     updateRemotes();
 
                     updateDependencyRemotes();
                     break;
-                case ADD_L:
-                case ADD_S:
+                case ADD_L | ADD_S:
                     var dep = args[i+1];
                     addDependency(dep);
-                case DELETE_L:
-                case DELETE_S:
+                case DELETE_L | DELETE_S:
                     var dep = args[i+1];
                     removeDependency(dep);
-                case HELP_L:
-                case HELP_S:
+                case HELP_L | HELP_S:
                     outputHelp();
                     break;
             }
