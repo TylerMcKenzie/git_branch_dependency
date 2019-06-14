@@ -47,6 +47,7 @@ class HXCPP_CLASS_ATTRIBUTES App_obj : public hx::Object
 
 		 ::app::model::DependencyModel dependencyModel;
 		 ::app::util::Formatter formatter;
+		::String currentBranch;
 		void run();
 		::Dynamic run_dyn();
 
@@ -71,8 +72,8 @@ class HXCPP_CLASS_ATTRIBUTES App_obj : public hx::Object
 		::String getBranchMergeStatus(::String branch);
 		::Dynamic getBranchMergeStatus_dyn();
 
-		::String getCurrentBranch();
-		::Dynamic getCurrentBranch_dyn();
+		::String loadCurrentBranch();
+		::Dynamic loadCurrentBranch_dyn();
 
 		void updateRemotes();
 		::Dynamic updateRemotes_dyn();
