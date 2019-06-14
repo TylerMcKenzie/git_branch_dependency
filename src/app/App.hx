@@ -5,15 +5,37 @@ import app.util.Formatter;
 
 import sys.io.Process;
 
+@:enum abstract COMMAND(String) {
+    var ADD_L = "add";
+    var ADD_S = "-a";
+
+    var DELETE_L = "delete";
+    var DELETE_S = "-d";
+
+    var HELP_L = "help";
+    var HELP_S = "-h";
+
+    var LIST_L = "list";
+    var LIST_S = "-l";
+
+    var STATUS_L = "status";
+    var STATUS_S = "-s";
+
+    var UPDATE_L = "update";
+    var UPDATE_S = "-u";
+}
+
 class App {
     private var dependencyModel:DependencyModel;
     private var formatter:Formatter;
+    private var currentBranch:String;
 
     public function new()
     {
+        currentBranch = getCurrentBranch();
         formatter = new Formatter();
         dependencyModel = new DependencyModel();
-        dependencyModel.loadDependencies(getCurrentBranch());
+        dependencyModel.loadDependencies(currentBranch);
     }
 
     public function run() : Void
@@ -22,29 +44,37 @@ class App {
 
         for (i in 0...args.length) {
             switch args[i] {
-                case "list":
-                    var currBranch = getCurrentBranch();
-                    Sys.println('Showing dependencies for [$currBranch]:');
+                case LIST_L:
+                case LIST_S:
+                    Sys.println('Showing dependencies for [$currentBranch]:');
                     for (dependency in dependencyModel.getDependencies()) {
                         Sys.println(dependency);
                     }
-                case "status":
+                    break;
+                case STATUS_L:
+                case STATUS_S:
                     Sys.println("Checking for remote updates...");
                     updateRemotes();
 
                     checkDependencyRemoteStatus();
-                case "update":
+                    break;
+                case UPDATE_L:
+                case UPDATE_S:
                     Sys.println("Updating remotes...");
                     updateRemotes();
 
                     updateDependencyRemotes();
-                case "-a":
+                    break;
+                case ADD_L:
+                case ADD_S:
                     var dep = args[i+1];
                     addDependency(dep);
-                case "-d":
+                case DELETE_L:
+                case DELETE_S:
                     var dep = args[i+1];
                     removeDependency(dep);
-                case "-h":
+                case HELP_L:
+                case HELP_S:
                     outputHelp();
                     break;
             }
@@ -137,11 +167,6 @@ class App {
 
             var mergedStatus = getBranchMergeStatus(dep);
 
-            // if (Std.parseInt(status.ahead) > 0 || Std.parseInt(status.behind) > 0) {
-            //     Sys.println('(${dep}) Remote: [ahead ${status.ahead}, behind ${status.behind}] Local: ${mergedStatus}');
-            // } else {
-            //     Sys.println('(${dep}) Remote: [up to date] Local: ${mergedStatus}');
-            // }
             branchRows.push([dep, status.ahead, status.behind, mergedStatus]);
         }
 
@@ -198,21 +223,21 @@ class App {
         Sys.println("    git-dependency - Manages branches as dependencies for complex features.");
         Sys.println("");
         Sys.println("SYNOPSIS");
-        Sys.println("    git dependency [-a <branch>] [-d <branch>] [-h]");
-        Sys.println("                   [update] [status] [list]");
+        Sys.println("    git dependency [add|-a <branch>] [delete|-d <branch>] [help|-h]");
+        Sys.println("                   [update|-u] [status|-s] [list|-s]");
         Sys.println("");
         Sys.println("OPTIONS");
-        Sys.println("    -a");
+        Sys.println("    add | -a");
         Sys.println("        add a branch as a dependency.");
-        Sys.println("    -d");
+        Sys.println("    delete | -d");
         Sys.println("        remove a branch from the dependency list.");
-        Sys.println("    -h");
+        Sys.println("    -help | h");
         Sys.println("        display help.");
-        Sys.println("    update");
+        Sys.println("    update | -u");
         Sys.println("        attempts to pull in dependencies with an octopus merge. If the merge fails it will fallback to individual merge/conflict resolution.");
-        Sys.println("    status");
+        Sys.println("    status | -s");
         Sys.println("        checks to see if there are any changes between the current HEAD and the branches dependencies and outputs a table with those changes.");
-        Sys.println("    list");
+        Sys.println("    list | -l");
         Sys.println("        list dependencies for the current branch.");
     }
 }
