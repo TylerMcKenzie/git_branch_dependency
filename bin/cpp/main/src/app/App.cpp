@@ -41,7 +41,7 @@ static const ::String _hx_array_data_2514e634_11[] = {
 	HX_("pull",c5,0b,61,4a),HX_("origin",e6,19,01,4b),
 };
 static const ::String _hx_array_data_2514e634_12[] = {
-	HX_("commit",f7,6f,2e,c7),HX_("-am",59,7a,22,00),HX_("'Updated conflicts.'",0e,8f,c0,32),
+	HX_("commit",f7,6f,2e,c7),HX_("-am",59,7a,22,00),HX_("'Updated merge conflicts'",5a,bc,2c,5b),
 };
 HX_LOCAL_STACK_FRAME(_hx_pos_0f0f8a6702f060a3_163_updateBranch,"app.App","updateBranch",0x1dfb7c05,"app.App.updateBranch","app/App.hx",163,0x9296abcb)
 HX_LOCAL_STACK_FRAME(_hx_pos_0f0f8a6702f060a3_167_checkDependencyRemoteStatus,"app.App","checkDependencyRemoteStatus",0x9ece2b71,"app.App.checkDependencyRemoteStatus","app/App.hx",167,0x9296abcb)
