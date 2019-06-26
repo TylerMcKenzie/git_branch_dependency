@@ -236,7 +236,7 @@ class App {
         masterMergedBranches = [ for (branch in masterMergedBranches) StringTools.trim(branch) ];
 
         for (dependency in dependencies) {
-            if (masterMergedBranches.indexOf(dependency) > -1) {
+            if (masterMergedBranches.indexOf(dependency) > -1 && dependency != "master") {
                 removeDependency(dependency);
             }
         }
@@ -266,5 +266,7 @@ class App {
         Sys.println("        checks to see if there are any changes between the current HEAD and the branches dependencies and outputs a table with those changes.");
         Sys.println("    list | -l");
         Sys.println("        list dependencies for the current branch.");
+        Sys.println("    prune | -p");
+        Sys.println("        prune dependencies from the dependency list that are merged with master.");
     }
 }
