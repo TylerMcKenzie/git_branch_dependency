@@ -146,7 +146,7 @@ class App {
                                 var confReg:EReg = ~/[Yy]/;
 
                                 if (confReg.match(userInput)) {
-                                    new Process("git", ["commit", "-am", "\'Updated conflicts.\'"]).exitCode();
+                                    new Process("git", ["commit", "-am", "\'Updated merge conflicts\'"]).exitCode();
                                 }
                             }
                         }
