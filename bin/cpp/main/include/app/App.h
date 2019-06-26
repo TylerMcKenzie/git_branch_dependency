@@ -9,6 +9,7 @@
 HX_DECLARE_CLASS1(app,App)
 HX_DECLARE_CLASS2(app,model,DependencyModel)
 HX_DECLARE_CLASS2(app,util,Formatter)
+HX_DECLARE_CLASS2(haxe,io,Input)
 
 namespace app{
 
@@ -48,6 +49,7 @@ class HXCPP_CLASS_ATTRIBUTES App_obj : public hx::Object
 		 ::app::model::DependencyModel dependencyModel;
 		 ::app::util::Formatter formatter;
 		::String currentBranch;
+		 ::haxe::io::Input input;
 		void run();
 		::Dynamic run_dyn();
 

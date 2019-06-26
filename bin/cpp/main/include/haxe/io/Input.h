@@ -61,6 +61,9 @@ class HXCPP_CLASS_ATTRIBUTES Input_obj : public hx::Object
 		 ::haxe::io::Bytes readAll( ::Dynamic bufsize);
 		::Dynamic readAll_dyn();
 
+		::String readLine();
+		::Dynamic readLine_dyn();
+
 };
 
 } // end namespace haxe

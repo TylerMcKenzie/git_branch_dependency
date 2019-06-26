@@ -7,6 +7,7 @@
 #endif
 
 HX_DECLARE_CLASS0(Sys)
+HX_DECLARE_CLASS2(haxe,io,Input)
 
 
 
@@ -51,6 +52,9 @@ class HXCPP_CLASS_ATTRIBUTES Sys_obj : public hx::Object
 
 		static void println( ::Dynamic v);
 		static ::Dynamic println_dyn();
+
+		static  ::haxe::io::Input _hx_stdin();
+		static ::Dynamic _hx_stdin_dyn();
 
 		static ::Array< ::String > args();
 		static ::Dynamic args_dyn();
