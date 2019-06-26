@@ -25,6 +25,9 @@
 #ifndef INCLUDED_sys_io_FileOutput
 #include <sys/io/FileOutput.h>
 #endif
+#ifndef INCLUDED_sys_io_FileInput
+#include <sys/io/FileInput.h>
+#endif
 #ifndef INCLUDED_sys_io_File
 #include <sys/io/File.h>
 #endif
@@ -109,6 +112,7 @@ hx::RegisterResources( hx::GetResources() );
 ::sys::io::_Process::Stdout_obj::__register();
 ::sys::io::_Process::Stdin_obj::__register();
 ::sys::io::FileOutput_obj::__register();
+::sys::io::FileInput_obj::__register();
 ::sys::io::File_obj::__register();
 ::sys::FileSystem_obj::__register();
 ::src::Main_obj::__register();
