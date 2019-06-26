@@ -74,7 +74,7 @@ class App {
                 case DELETE_L | DELETE_S:
                     var dep = args[i+1];
                     removeDependency(dep);
-                case PRUNE_L || PRUNE_S:
+                case PRUNE_L | PRUNE_S:
                     updateRemotes();
 
                     pruneDependencies();
