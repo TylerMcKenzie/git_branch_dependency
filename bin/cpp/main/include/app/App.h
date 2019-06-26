@@ -80,6 +80,9 @@ class HXCPP_CLASS_ATTRIBUTES App_obj : public hx::Object
 		void updateRemotes();
 		::Dynamic updateRemotes_dyn();
 
+		void pruneDependencies();
+		::Dynamic pruneDependencies_dyn();
+
 		void outputHelp();
 		::Dynamic outputHelp_dyn();
 
