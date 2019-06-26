@@ -20,6 +20,9 @@ import sys.io.Process;
     var LIST_L = "list";
     var LIST_S = "-l";
 
+    var PRUNE_L = "prune";
+    var PRUNE_S = "-p";
+
     var STATUS_L = "status";
     var STATUS_S = "-s";
 
@@ -71,6 +74,11 @@ class App {
                 case DELETE_L | DELETE_S:
                     var dep = args[i+1];
                     removeDependency(dep);
+                case PRUNE_L || PRUNE_S:
+                    updateRemotes();
+
+                    pruneDependencies();
+                    break;
                 case HELP_L | HELP_S:
                     outputHelp();
                     break;
@@ -219,6 +227,19 @@ class App {
     {
         // This updates remotes to get accurate checks
         new Process("git", ["remote", "update"]).exitCode();
+    }
+
+    private function pruneDependencies() : Void
+    {
+        var dependencies = dependencyModel.getDependencies();
+        var masterMergedBranches = new Process("git", ["branch", "--merged", "master"]).stdout.readAll().toString().split("\n");
+        masterMergedBranches = [ for (branch in masterMergedBranches) StringTools.trim(branch) ];
+
+        for (dependency in dependencies) {
+            if (masterMergedBranches.indexOf(dependency) > -1) {
+                removeDependency(dependency);
+            }
+        }
     }
 
     private function outputHelp() : Void
