@@ -1,0 +1,9 @@
+-cp src
+#-dce full
+
+-D haxeJSON
+
+-hl bin/hl_c/main.c
+
+# main
+-main src.Main

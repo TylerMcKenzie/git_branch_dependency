@@ -64,10 +64,10 @@ class App {
                     break;
                 case ADD_L | ADD_S:
                     var dep = args[i+1];
-                    addDependency(dep);
+                    addBranchDependency(dep);
                 case DELETE_L | DELETE_S:
                     var dep = args[i+1];
-                    removeDependency(dep);
+                    removeBranchDependency(dep);
                 case HELP_L | HELP_S:
                     outputHelp();
                     break;
@@ -75,13 +75,13 @@ class App {
         }
     }
 
-    private function addDependency(dependency:String) : Void
+    private function addBranchDependency(dependency:String) : Void
     {
         dependencyModel.addDependency(dependency);
         dependencyModel.save();
     }
 
-    private function removeDependency(dependency:String) : Void
+    private function removeBranchDependency(dependency:String) : Void
     {
         dependencyModel.removeDependency(dependency);
         dependencyModel.save();
