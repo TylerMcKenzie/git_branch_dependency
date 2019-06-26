@@ -7,8 +7,15 @@
 #ifndef INCLUDED_Sys
 #include <Sys.h>
 #endif
+#ifndef INCLUDED_haxe_io_Input
+#include <haxe/io/Input.h>
+#endif
+#ifndef INCLUDED_sys_io_FileInput
+#include <sys/io/FileInput.h>
+#endif
 
 HX_LOCAL_STACK_FRAME(_hx_pos_7ec14b5404d30118_31_println,"Sys","println",0x3905f76e,"Sys.println","/usr/share/haxe/std/cpp/_std/Sys.hx",31,0x4e14a6b5)
+HX_LOCAL_STACK_FRAME(_hx_pos_7ec14b5404d30118_36_stdin,"Sys","stdin",0x03b9a107,"Sys.stdin","/usr/share/haxe/std/cpp/_std/Sys.hx",36,0x4e14a6b5)
 HX_LOCAL_STACK_FRAME(_hx_pos_7ec14b5404d30118_54_args,"Sys","args",0xeaeddc7e,"Sys.args","/usr/share/haxe/std/cpp/_std/Sys.hx",54,0x4e14a6b5)
 HX_LOCAL_STACK_FRAME(_hx_pos_7ec14b5404d30118_85_systemName,"Sys","systemName",0xbea5b6bb,"Sys.systemName","/usr/share/haxe/std/cpp/_std/Sys.hx",85,0x4e14a6b5)
 HX_LOCAL_STACK_FRAME(_hx_pos_7ec14b5404d30118_89_command,"Sys","command",0x363f8cca,"Sys.command","/usr/share/haxe/std/cpp/_std/Sys.hx",89,0x4e14a6b5)
@@ -37,6 +44,14 @@ HXDLIN(  31)		::__hxcpp_println(v);
 
 
 STATIC_HX_DEFINE_DYNAMIC_FUNC1(Sys_obj,println,(void))
+
+ ::haxe::io::Input Sys_obj::_hx_stdin(){
+            	HX_GC_STACKFRAME(&_hx_pos_7ec14b5404d30118_36_stdin)
+HXDLIN(  36)		return  ::sys::io::FileInput_obj::__alloc( HX_CTX ,_hx_std_file_stdin());
+            	}
+
+
+STATIC_HX_DEFINE_DYNAMIC_FUNC0(Sys_obj,_hx_stdin,return )
 
 ::Array< ::String > Sys_obj::args(){
             	HX_STACKFRAME(&_hx_pos_7ec14b5404d30118_54_args)
@@ -97,6 +112,9 @@ bool Sys_obj::__GetStatic(const ::String &inName, Dynamic &outValue, hx::Propert
 	case 4:
 		if (HX_FIELD_EQ(inName,"args") ) { outValue = args_dyn(); return true; }
 		break;
+	case 5:
+		if (HX_FIELD_EQ(inName,"stdin") ) { outValue = _hx_stdin_dyn(); return true; }
+		break;
 	case 7:
 		if (HX_FIELD_EQ(inName,"println") ) { outValue = println_dyn(); return true; }
 		if (HX_FIELD_EQ(inName,"command") ) { outValue = command_dyn(); return true; }
@@ -127,6 +145,7 @@ hx::Class Sys_obj::__mClass;
 
 static ::String Sys_obj_sStaticFields[] = {
 	HX_HCSTRING("println","\xef","\xdb","\x33","\x84"),
+	HX_HCSTRING("stdin","\x48","\xb3","\x0d","\x84"),
 	HX_HCSTRING("args","\x5d","\x8d","\x74","\x40"),
 	HX_HCSTRING("systemName","\xda","\xd8","\x82","\xf7"),
 	HX_HCSTRING("command","\x4b","\x71","\x6d","\x81"),

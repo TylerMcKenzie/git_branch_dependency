@@ -2,6 +2,7 @@
 "obj/linux64/bf19de24_Stdout.o"
 "obj/linux64/bf19de24_Stdin.o"
 "obj/linux64/b433cd72_FileOutput.o"
+"obj/linux64/b433cd72_FileInput.o"
 "obj/linux64/b433cd72_File.o"
 "obj/linux64/3166d1a8_FileSystem.o"
 "obj/linux64/1e2ca1eb_Main.o"

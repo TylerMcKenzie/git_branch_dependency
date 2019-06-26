@@ -3,6 +3,8 @@ package app;
 import app.model.DependencyModel;
 import app.util.Formatter;
 
+import haxe.io.Input;
+
 import sys.io.Process;
 
 @:enum abstract COMMAND(String) {
@@ -18,6 +20,9 @@ import sys.io.Process;
     var LIST_L = "list";
     var LIST_S = "-l";
 
+    var PRUNE_L = "prune";
+    var PRUNE_S = "-p";
+
     var STATUS_L = "status";
     var STATUS_S = "-s";
 
@@ -29,6 +34,7 @@ class App {
     private var dependencyModel:DependencyModel;
     private var formatter:Formatter;
     private var currentBranch:String;
+    private var input:Input = Sys.stdin();
 
     public function new()
     {
@@ -67,7 +73,12 @@ class App {
                     addBranchDependency(dep);
                 case DELETE_L | DELETE_S:
                     var dep = args[i+1];
-                    removeBranchDependency(dep);
+                    removeDependency(dep);
+                case PRUNE_L | PRUNE_S:
+                    updateRemotes();
+
+                    pruneDependencies();
+                    break;
                 case HELP_L | HELP_S:
                     outputHelp();
                     break;
@@ -118,7 +129,7 @@ class App {
 
                 for(branch in preparedBranches) {
                     if (Sys.command("git", ["pull", "origin", branch, "--no-ff"]) != 0) {
-                        var diffFiles = new Process("git diff --diff-filter=U --name-only").stdout.readAll().toString();
+                        var diffFiles = new Process("git diff --diff-filter=UU --name-only").stdout.readAll().toString();
 
                         var unmergedFiles = [];
                         for (file in diffFiles.split("\n")) {
@@ -135,6 +146,15 @@ class App {
                                 if (Sys.command(editor, unmergedFiles) != 0) {
                                     Sys.println('An error occurred when opening \'${editor}\'');
                                     return;
+                                }
+
+                                Sys.println("Commit these changes? [Y/n]: ");
+
+                                var userInput = input.readLine();
+                                var confReg:EReg = ~/[Yy]/;
+
+                                if (confReg.match(userInput)) {
+                                    new Process("git", ["commit", "-am", "\'Updated merge conflicts\'"]).exitCode();
                                 }
                             }
                         }
@@ -209,6 +229,19 @@ class App {
         new Process("git", ["remote", "update"]).exitCode();
     }
 
+    private function pruneDependencies() : Void
+    {
+        var dependencies = dependencyModel.getDependencies();
+        var masterMergedBranches = new Process("git", ["branch", "--merged", "master"]).stdout.readAll().toString().split("\n");
+        masterMergedBranches = [ for (branch in masterMergedBranches) StringTools.trim(branch) ];
+
+        for (dependency in dependencies) {
+            if (masterMergedBranches.indexOf(dependency) > -1 && dependency != "master") {
+                removeDependency(dependency);
+            }
+        }
+    }
+
     private function outputHelp() : Void
     {
         Sys.println("GIT-DEPENDENCY");
@@ -233,5 +266,7 @@ class App {
         Sys.println("        checks to see if there are any changes between the current HEAD and the branches dependencies and outputs a table with those changes.");
         Sys.println("    list | -l");
         Sys.println("        list dependencies for the current branch.");
+        Sys.println("    prune | -p");
+        Sys.println("        prune dependencies from the dependency list that are merged with master.");
     }
 }
