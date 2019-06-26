@@ -3,6 +3,8 @@ package app;
 import app.model.DependencyModel;
 import app.util.Formatter;
 
+import haxe.io.Input;
+
 import sys.io.Process;
 
 @:enum abstract COMMAND(String) {
@@ -29,6 +31,7 @@ class App {
     private var dependencyModel:DependencyModel;
     private var formatter:Formatter;
     private var currentBranch:String;
+    private var input:Input = Sys.stdin();
 
     public function new()
     {
@@ -118,7 +121,7 @@ class App {
 
                 for(branch in preparedBranches) {
                     if (Sys.command("git", ["pull", "origin", branch, "--no-ff"]) != 0) {
-                        var diffFiles = new Process("git diff --diff-filter=U --name-only").stdout.readAll().toString();
+                        var diffFiles = new Process("git diff --diff-filter=UU --name-only").stdout.readAll().toString();
 
                         var unmergedFiles = [];
                         for (file in diffFiles.split("\n")) {
@@ -135,6 +138,15 @@ class App {
                                 if (Sys.command(editor, unmergedFiles) != 0) {
                                     Sys.println('An error occurred when opening \'${editor}\'');
                                     return;
+                                }
+
+                                Sys.println("Commit these changes? [Y/n]: ");
+
+                                var userInput = input.readLine();
+                                var confReg:EReg = ~/[Yy]/;
+
+                                if (confReg.match(userInput)) {
+                                    new Process("git" ["commit", "-am", "\'Updated conflicts.\'"]).exitCode();
                                 }
                             }
                         }
