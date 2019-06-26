@@ -354,7 +354,14 @@ HXLINE( 238)			int _g11 = (int)0;
 HXDLIN( 238)			while((_g11 < dependencies->length)){
 HXLINE( 238)				::String dependency = dependencies->__get(_g11);
 HXDLIN( 238)				_g11 = (_g11 + (int)1);
-HXLINE( 239)				if ((masterMergedBranches->indexOf(dependency,null()) > (int)-1)) {
+HXLINE( 239)				bool _hx_tmp;
+HXDLIN( 239)				if ((masterMergedBranches->indexOf(dependency,null()) > (int)-1)) {
+HXLINE( 239)					_hx_tmp = (dependency != HX_("master",a2,80,20,bb));
+            				}
+            				else {
+HXLINE( 239)					_hx_tmp = false;
+            				}
+HXDLIN( 239)				if (_hx_tmp) {
 HXLINE( 240)					this->removeDependency(dependency);
             				}
             			}
@@ -388,6 +395,8 @@ HXLINE( 265)		::Sys_obj::println(HX_("    status | -s",78,00,54,7e));
 HXLINE( 266)		::Sys_obj::println(HX_("        checks to see if there are any changes between the current HEAD and the branches dependencies and outputs a table with those changes.",3e,9b,29,22));
 HXLINE( 267)		::Sys_obj::println(HX_("    list | -l",c5,8b,0e,57));
 HXLINE( 268)		::Sys_obj::println(HX_("        list dependencies for the current branch.",ea,fd,b2,27));
+HXLINE( 269)		::Sys_obj::println(HX_("    prune | -p",7d,81,be,94));
+HXLINE( 270)		::Sys_obj::println(HX_("        prune dependencies from the dependency list that are merged with master.",52,5e,37,df));
             	}
 
 
