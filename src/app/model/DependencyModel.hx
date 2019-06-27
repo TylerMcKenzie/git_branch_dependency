@@ -12,7 +12,7 @@ typedef DependencyData = {
 }
 
 class DependencyModel {
-    public var JSON_FILE:String = "/.git/git-dep.json";
+    public var JSON_FILE:String = "git-dep.json";
 
     private var currentBranch:String = null;
 
@@ -23,7 +23,11 @@ class DependencyModel {
     public function new()
     {
         var root = getRootDirectory();
-        JSON_FILE = root + JSON_FILE;
+
+        if (root.length > 0) {
+            JSON_FILE = root + "/.git/" + JSON_FILE;
+        }
+
         loadDependencyGraph();
     }
 
