@@ -251,7 +251,7 @@ class App {
         Sys.println("");
         Sys.println("SYNOPSIS");
         Sys.println("    git dependency [add|-a <branch>] [delete|-d <branch>] [help|-h]");
-        Sys.println("                   [update|-u] [status|-s] [list|-s]");
+        Sys.println("                   [update|-u] [status|-s] [list|-s] [prune|-p]");
         Sys.println("");
         Sys.println("OPTIONS");
         Sys.println("    add | -a");
