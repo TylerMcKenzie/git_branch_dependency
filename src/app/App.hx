@@ -83,6 +83,9 @@ class App {
                                 dependencyFound = false;
                             }
                         }
+                    } else {
+                        Sys.println('Branch: \'${args[j]}\' not found in dependency list.');
+                        break;
                     }
 
                     if (arg_dependencies.length > 0) {
