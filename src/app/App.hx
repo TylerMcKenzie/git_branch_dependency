@@ -63,10 +63,39 @@ class App {
                     checkDependencyRemoteStatus();
                     break;
                 case UPDATE_L | UPDATE_S:
+                    var dependencies = dependencyModel.getDependencies();
+                    var arg_dependencies = [];
+                    var j = i + 1;
+
+                    if (dependencies.indexOf(args[j]) > -1) {
+                        arg_dependencies.push(args[j]);
+
+                        var dependencyFound = true;
+                        while (dependencyFound) {
+                            j++;
+
+                            if (
+                                dependencies.indexOf(args[j]) > -1 &&
+                                arg_dependencies.indexOf(args[j]) < 0
+                            ) {
+                                arg_dependencies.push(args[j]);
+                            } else {
+                                dependencyFound = false;
+                            }
+                        }
+                    } else {
+                        Sys.println('[WARN] Branch: \'${args[j]}\' not found in dependency list.');
+                        break;
+                    }
+
+                    if (arg_dependencies.length > 0) {
+                        dependencies = arg_dependencies;
+                    }
+
                     Sys.println("Updating remotes...");
                     updateRemotes();
 
-                    updateDependencyRemotes();
+                    updateDependencyRemotes(dependencies);
                     break;
                 case ADD_L | ADD_S:
                     var dep = args[i+1];
@@ -98,22 +127,21 @@ class App {
         dependencyModel.save();
     }
 
-    private function updateDependencyRemotes() : Void
+    private function updateDependencyRemotes(dependencies:Array<String>) : Void
     {
-        var deps = dependencyModel.getDependencies();
         var updated = false;
 
         var preparedBranches:Array<String> = [];
 
-        for(dep in deps) {
-            var dependencyStatus = getBranchRemoteStatus(dep);
+        for(dependency in dependencies) {
+            var dependencyStatus = getBranchRemoteStatus(dependency);
 
             if (Std.parseInt(dependencyStatus.behind) > 0) {
-                updateBranch(dep);
+                updateBranch(dependency);
             }
 
-            if (getBranchMergeStatus(dep) == "unmerged") {
-                preparedBranches.push(dep);
+            if (getBranchMergeStatus(dependency) == "unmerged") {
+                preparedBranches.push(dependency);
             }
         }
 
@@ -128,42 +156,53 @@ class App {
                 new Process("git reset --hard").exitCode();
 
                 for(branch in preparedBranches) {
-                    if (Sys.command("git", ["pull", "origin", branch, "--no-ff"]) != 0) {
-                        var diffFiles = new Process("git diff --diff-filter=UU --name-only").stdout.readAll().toString();
-
-                        var unmergedFiles = [];
-                        for (file in diffFiles.split("\n")) {
-                            if (file.length > 0) {
-                                unmergedFiles.push(StringTools.trim(file));
-                            }
-                        }
-
-                        // Open default editor if one exists
-                        var editor = StringTools.trim(new Process("git config --global core.editor").stdout.readAll().toString());
-
-                        if (editor.length > 0) {
-                            if (unmergedFiles.length > 0) {
-                                if (Sys.command(editor, unmergedFiles) != 0) {
-                                    Sys.println('An error occurred when opening \'${editor}\'');
-                                    return;
-                                }
-
-                                Sys.println("Commit these changes? [Y/n]: ");
-
-                                var userInput = input.readLine();
-                                var confReg:EReg = ~/[Yy]/;
-
-                                if (confReg.match(userInput)) {
-                                    new Process("git", ["commit", "-am", "\'Updated merge conflicts\'"]).exitCode();
-                                }
-                            }
-                        }
+                    if (!updateDependencyBranch(branch)) {
+                        throw 'There was an error updating: \'$branch\'';
                     }
                 }
             }
         } else {
             Sys.println("Nothing updated.");
         }
+    }
+
+    private function updateDependencyBranch(branch:String) : Bool
+    {
+        if (Sys.command("git", ["pull", "origin", branch, "--no-ff"]) != 0) {
+            var diffFiles = new Process("git diff --diff-filter=UU --name-only").stdout.readAll().toString();
+
+            var unmergedFiles = [];
+            for (file in diffFiles.split("\n")) {
+                if (file.length > 0) {
+                    unmergedFiles.push(StringTools.trim(file));
+                }
+            }
+
+            // Open default editor if one exists
+            var editor = StringTools.trim(new Process("git config --global core.editor").stdout.readAll().toString());
+
+            if (editor.length > 0) {
+                if (unmergedFiles.length > 0) {
+                    if (Sys.command(editor, unmergedFiles) != 0) {
+                        Sys.println('An error occurred when opening \'${editor}\'');
+                        return false;
+                    }
+
+                    Sys.println("Commit these changes? [Y/n]: ");
+
+                    var userInput = input.readLine();
+                    var confReg:EReg = ~/[Yy]/;
+
+                    if (confReg.match(userInput)) {
+                        new Process("git", ["commit", "-am", "\'Updated merge conflicts\'"]).exitCode();
+                    }
+                }
+            } else {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private function updateBranch(branch:String) : Void
