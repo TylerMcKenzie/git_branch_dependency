@@ -63,10 +63,17 @@ class App {
                     checkDependencyRemoteStatus();
                     break;
                 case UPDATE_L | UPDATE_S:
+                    var j = i;
+                    var dependencies = dependencyModel.getDependencies();
+
+                    if (dependencies.indexOf(args[j+1])) > -1) {
+                        
+                    }
+
                     Sys.println("Updating remotes...");
                     updateRemotes();
 
-                    updateDependencyRemotes();
+                    updateDependencyRemotes(dependencies);
                     break;
                 case ADD_L | ADD_S:
                     var dep = args[i+1];
@@ -98,22 +105,21 @@ class App {
         dependencyModel.save();
     }
 
-    private function updateDependencyRemotes() : Void
+    private function updateDependencyRemotes(dependencies:Array<String>) : Void
     {
-        var deps = dependencyModel.getDependencies();
         var updated = false;
 
         var preparedBranches:Array<String> = [];
 
-        for(dep in deps) {
-            var dependencyStatus = getBranchRemoteStatus(dep);
+        for(dependency in dependencies) {
+            var dependencyStatus = getBranchRemoteStatus(dependency);
 
             if (Std.parseInt(dependencyStatus.behind) > 0) {
-                updateBranch(dep);
+                updateBranch(dependency);
             }
 
-            if (getBranchMergeStatus(dep) == "unmerged") {
-                preparedBranches.push(dep);
+            if (getBranchMergeStatus(dependency) == "unmerged") {
+                preparedBranches.push(dependency);
             }
         }
 
