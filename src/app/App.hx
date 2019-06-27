@@ -290,7 +290,7 @@ class App {
         Sys.println("");
         Sys.println("SYNOPSIS");
         Sys.println("    git dependency [add|-a <branch>] [delete|-d <branch>] [help|-h]");
-        Sys.println("                   [update|-u] [status|-s] [list|-s] [prune|-p]");
+        Sys.println("                   [update <branch> |-u <branch>] [status|-s] [list|-s] [prune|-p]");
         Sys.println("");
         Sys.println("OPTIONS");
         Sys.println("    add | -a");
@@ -299,8 +299,8 @@ class App {
         Sys.println("        remove a branch from the dependency list.");
         Sys.println("    -help | h");
         Sys.println("        display help.");
-        Sys.println("    update | -u");
-        Sys.println("        attempts to pull in dependencies with an octopus merge. If the merge fails it will fallback to individual merge/conflict resolution.");
+        Sys.println("    update <branch> | -u <branch>");
+        Sys.println("        attempts to update and pull in dependency. If no branch is supplied it will attempt to pull in all dependencies with an octopus merge. If the merge fails it will fallback to individual merge/conflict resolution.");
         Sys.println("    status | -s");
         Sys.println("        checks to see if there are any changes between the current HEAD and the branches dependencies and outputs a table with those changes.");
         Sys.println("    list | -l");
