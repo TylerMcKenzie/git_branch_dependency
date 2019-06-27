@@ -84,7 +84,7 @@ class App {
                             }
                         }
                     } else {
-                        Sys.println('Branch: \'${args[j]}\' not found in dependency list.');
+                        Sys.println('[WARN] Branch: \'${args[j]}\' not found in dependency list.');
                         break;
                     }
 
