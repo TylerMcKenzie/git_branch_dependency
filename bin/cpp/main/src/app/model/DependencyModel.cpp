@@ -33,13 +33,13 @@
 #endif
 
 HX_DEFINE_STACK_FRAME(_hx_pos_a8c2a3b9c8fe0cf3_14_new,"app.model.DependencyModel","new",0xa0650f5e,"app.model.DependencyModel.new","app/model/DependencyModel.hx",14,0xcfa8d514)
-HX_LOCAL_STACK_FRAME(_hx_pos_a8c2a3b9c8fe0cf3_32_save,"app.model.DependencyModel","save",0xbb536a7f,"app.model.DependencyModel.save","app/model/DependencyModel.hx",32,0xcfa8d514)
-HX_LOCAL_STACK_FRAME(_hx_pos_a8c2a3b9c8fe0cf3_37_getDependencies,"app.model.DependencyModel","getDependencies",0x9825ed9d,"app.model.DependencyModel.getDependencies","app/model/DependencyModel.hx",37,0xcfa8d514)
-HX_LOCAL_STACK_FRAME(_hx_pos_a8c2a3b9c8fe0cf3_42_addDependency,"app.model.DependencyModel","addDependency",0x7b0b88ca,"app.model.DependencyModel.addDependency","app/model/DependencyModel.hx",42,0xcfa8d514)
-HX_LOCAL_STACK_FRAME(_hx_pos_a8c2a3b9c8fe0cf3_51_removeDependency,"app.model.DependencyModel","removeDependency",0x5beaee71,"app.model.DependencyModel.removeDependency","app/model/DependencyModel.hx",51,0xcfa8d514)
-HX_LOCAL_STACK_FRAME(_hx_pos_a8c2a3b9c8fe0cf3_60_loadDependencies,"app.model.DependencyModel","loadDependencies",0x241d1571,"app.model.DependencyModel.loadDependencies","app/model/DependencyModel.hx",60,0xcfa8d514)
-HX_LOCAL_STACK_FRAME(_hx_pos_a8c2a3b9c8fe0cf3_78_loadDependencyGraph,"app.model.DependencyModel","loadDependencyGraph",0xd7804bfb,"app.model.DependencyModel.loadDependencyGraph","app/model/DependencyModel.hx",78,0xcfa8d514)
-HX_LOCAL_STACK_FRAME(_hx_pos_a8c2a3b9c8fe0cf3_89_getRootDirectory,"app.model.DependencyModel","getRootDirectory",0xbb9873b7,"app.model.DependencyModel.getRootDirectory","app/model/DependencyModel.hx",89,0xcfa8d514)
+HX_LOCAL_STACK_FRAME(_hx_pos_a8c2a3b9c8fe0cf3_36_save,"app.model.DependencyModel","save",0xbb536a7f,"app.model.DependencyModel.save","app/model/DependencyModel.hx",36,0xcfa8d514)
+HX_LOCAL_STACK_FRAME(_hx_pos_a8c2a3b9c8fe0cf3_41_getDependencies,"app.model.DependencyModel","getDependencies",0x9825ed9d,"app.model.DependencyModel.getDependencies","app/model/DependencyModel.hx",41,0xcfa8d514)
+HX_LOCAL_STACK_FRAME(_hx_pos_a8c2a3b9c8fe0cf3_46_addDependency,"app.model.DependencyModel","addDependency",0x7b0b88ca,"app.model.DependencyModel.addDependency","app/model/DependencyModel.hx",46,0xcfa8d514)
+HX_LOCAL_STACK_FRAME(_hx_pos_a8c2a3b9c8fe0cf3_55_removeDependency,"app.model.DependencyModel","removeDependency",0x5beaee71,"app.model.DependencyModel.removeDependency","app/model/DependencyModel.hx",55,0xcfa8d514)
+HX_LOCAL_STACK_FRAME(_hx_pos_a8c2a3b9c8fe0cf3_64_loadDependencies,"app.model.DependencyModel","loadDependencies",0x241d1571,"app.model.DependencyModel.loadDependencies","app/model/DependencyModel.hx",64,0xcfa8d514)
+HX_LOCAL_STACK_FRAME(_hx_pos_a8c2a3b9c8fe0cf3_82_loadDependencyGraph,"app.model.DependencyModel","loadDependencyGraph",0xd7804bfb,"app.model.DependencyModel.loadDependencyGraph","app/model/DependencyModel.hx",82,0xcfa8d514)
+HX_LOCAL_STACK_FRAME(_hx_pos_a8c2a3b9c8fe0cf3_93_getRootDirectory,"app.model.DependencyModel","getRootDirectory",0xbb9873b7,"app.model.DependencyModel.getRootDirectory","app/model/DependencyModel.hx",93,0xcfa8d514)
 static const ::String _hx_array_data_275ec86c_8[] = {
 	HX_("rev-parse",89,52,b1,66),HX_("--show-toplevel",ff,07,73,f8),
 };
@@ -51,10 +51,12 @@ void DependencyModel_obj::__construct(){
 HXLINE(  21)		this->dependencyGraph = null();
 HXLINE(  19)		this->dependencies = null();
 HXLINE(  17)		this->currentBranch = null();
-HXLINE(  15)		this->JSON_FILE = HX_("/.git/git-dep.json",7e,22,87,fc);
+HXLINE(  15)		this->JSON_FILE = HX_("git-dep.json",02,a8,e8,cf);
 HXLINE(  25)		::String root = this->getRootDirectory();
-HXLINE(  26)		this->JSON_FILE = (root + this->JSON_FILE);
-HXLINE(  27)		this->loadDependencyGraph();
+HXLINE(  27)		if ((root.length > (int)0)) {
+HXLINE(  28)			this->JSON_FILE = ((root + HX_("/.git/",7c,b0,99,8b)) + this->JSON_FILE);
+            		}
+HXLINE(  31)		this->loadDependencyGraph();
             	}
 
 Dynamic DependencyModel_obj::__CreateEmpty() { return new DependencyModel_obj; }
@@ -73,66 +75,66 @@ bool DependencyModel_obj::_hx_isInstanceOf(int inClassId) {
 }
 
 void DependencyModel_obj::save(){
-            	HX_STACKFRAME(&_hx_pos_a8c2a3b9c8fe0cf3_32_save)
-HXDLIN(  32)		::String _hx_tmp = this->JSON_FILE;
-HXDLIN(  32)		::sys::io::File_obj::saveContent(_hx_tmp,::haxe::format::JsonPrinter_obj::print(this->dependencyGraph,null(),null()));
+            	HX_STACKFRAME(&_hx_pos_a8c2a3b9c8fe0cf3_36_save)
+HXDLIN(  36)		::String _hx_tmp = this->JSON_FILE;
+HXDLIN(  36)		::sys::io::File_obj::saveContent(_hx_tmp,::haxe::format::JsonPrinter_obj::print(this->dependencyGraph,null(),null()));
             	}
 
 
 HX_DEFINE_DYNAMIC_FUNC0(DependencyModel_obj,save,(void))
 
 ::Array< ::String > DependencyModel_obj::getDependencies(){
-            	HX_STACKFRAME(&_hx_pos_a8c2a3b9c8fe0cf3_37_getDependencies)
-HXDLIN(  37)		return this->dependencies;
+            	HX_STACKFRAME(&_hx_pos_a8c2a3b9c8fe0cf3_41_getDependencies)
+HXDLIN(  41)		return this->dependencies;
             	}
 
 
 HX_DEFINE_DYNAMIC_FUNC0(DependencyModel_obj,getDependencies,return )
 
 bool DependencyModel_obj::addDependency(::String dependency){
-            	HX_STACKFRAME(&_hx_pos_a8c2a3b9c8fe0cf3_42_addDependency)
-HXDLIN(  42)		if ((this->dependencies->indexOf(dependency,null()) == (int)-1)) {
-HXLINE(  43)			this->dependencies->push(dependency);
-HXLINE(  44)			return true;
+            	HX_STACKFRAME(&_hx_pos_a8c2a3b9c8fe0cf3_46_addDependency)
+HXDLIN(  46)		if ((this->dependencies->indexOf(dependency,null()) == (int)-1)) {
+HXLINE(  47)			this->dependencies->push(dependency);
+HXLINE(  48)			return true;
             		}
             		else {
-HXLINE(  46)			return false;
+HXLINE(  50)			return false;
             		}
-HXLINE(  42)		return false;
+HXLINE(  46)		return false;
             	}
 
 
 HX_DEFINE_DYNAMIC_FUNC1(DependencyModel_obj,addDependency,return )
 
 bool DependencyModel_obj::removeDependency(::String dependency){
-            	HX_STACKFRAME(&_hx_pos_a8c2a3b9c8fe0cf3_51_removeDependency)
-HXLINE(  52)		if ((this->dependencies->indexOf(dependency,null()) != (int)-1)) {
-HXLINE(  53)			return this->dependencies->remove(dependency);
+            	HX_STACKFRAME(&_hx_pos_a8c2a3b9c8fe0cf3_55_removeDependency)
+HXLINE(  56)		if ((this->dependencies->indexOf(dependency,null()) != (int)-1)) {
+HXLINE(  57)			return this->dependencies->remove(dependency);
             		}
-HXLINE(  56)		return false;
+HXLINE(  60)		return false;
             	}
 
 
 HX_DEFINE_DYNAMIC_FUNC1(DependencyModel_obj,removeDependency,return )
 
 void DependencyModel_obj::loadDependencies(::String branch){
-            	HX_STACKFRAME(&_hx_pos_a8c2a3b9c8fe0cf3_60_loadDependencies)
-HXLINE(  61)		if ((branch.length == (int)0)) {
-HXLINE(  62)			HX_STACK_DO_THROW(HX_("A branch is required to be loaded.",67,b0,01,86));
+            	HX_STACKFRAME(&_hx_pos_a8c2a3b9c8fe0cf3_64_loadDependencies)
+HXLINE(  65)		if ((branch.length == (int)0)) {
+HXLINE(  66)			HX_STACK_DO_THROW(HX_("A branch is required to be loaded.",67,b0,01,86));
             		}
-HXLINE(  65)		if (::Reflect_obj::hasField(this->dependencyGraph,branch)) {
-HXLINE(  66)			this->dependencies = ( (::Array< ::String >)(::Reflect_obj::field(this->dependencyGraph,branch)->__Field(HX_("deps",c4,5b,66,42),hx::paccDynamic)) );
-HXLINE(  67)			this->currentBranch = branch;
-            		}
-            		else {
-HXLINE(  69)			{
-HXLINE(  69)				 ::Dynamic value =  ::Dynamic(hx::Anon_obj::Create(1)
-            					->setFixed(0,HX_("deps",c4,5b,66,42),::Array_obj< ::String >::__new(0)));
-HXDLIN(  69)				::Reflect_obj::setField(this->dependencyGraph,branch,value);
-            			}
+HXLINE(  69)		if (::Reflect_obj::hasField(this->dependencyGraph,branch)) {
 HXLINE(  70)			this->dependencies = ( (::Array< ::String >)(::Reflect_obj::field(this->dependencyGraph,branch)->__Field(HX_("deps",c4,5b,66,42),hx::paccDynamic)) );
 HXLINE(  71)			this->currentBranch = branch;
-HXLINE(  72)			this->save();
+            		}
+            		else {
+HXLINE(  73)			{
+HXLINE(  73)				 ::Dynamic value =  ::Dynamic(hx::Anon_obj::Create(1)
+            					->setFixed(0,HX_("deps",c4,5b,66,42),::Array_obj< ::String >::__new(0)));
+HXDLIN(  73)				::Reflect_obj::setField(this->dependencyGraph,branch,value);
+            			}
+HXLINE(  74)			this->dependencies = ( (::Array< ::String >)(::Reflect_obj::field(this->dependencyGraph,branch)->__Field(HX_("deps",c4,5b,66,42),hx::paccDynamic)) );
+HXLINE(  75)			this->currentBranch = branch;
+HXLINE(  76)			this->save();
             		}
             	}
 
@@ -140,14 +142,14 @@ HXLINE(  72)			this->save();
 HX_DEFINE_DYNAMIC_FUNC1(DependencyModel_obj,loadDependencies,(void))
 
 void DependencyModel_obj::loadDependencyGraph(){
-            	HX_GC_STACKFRAME(&_hx_pos_a8c2a3b9c8fe0cf3_78_loadDependencyGraph)
-HXDLIN(  78)		if (::sys::FileSystem_obj::exists(this->JSON_FILE)) {
-HXLINE(  79)			 ::Dynamic fileDependencies =  ::haxe::format::JsonParser_obj::__alloc( HX_CTX ,::sys::io::File_obj::getContent(this->JSON_FILE))->parseRec();
-HXLINE(  80)			this->dependencyGraph = fileDependencies;
+            	HX_GC_STACKFRAME(&_hx_pos_a8c2a3b9c8fe0cf3_82_loadDependencyGraph)
+HXDLIN(  82)		if (::sys::FileSystem_obj::exists(this->JSON_FILE)) {
+HXLINE(  83)			 ::Dynamic fileDependencies =  ::haxe::format::JsonParser_obj::__alloc( HX_CTX ,::sys::io::File_obj::getContent(this->JSON_FILE))->parseRec();
+HXLINE(  84)			this->dependencyGraph = fileDependencies;
             		}
             		else {
-HXLINE(  82)			this->dependencyGraph =  ::Dynamic(hx::Anon_obj::Create(0));
-HXLINE(  83)			this->save();
+HXLINE(  86)			this->dependencyGraph =  ::Dynamic(hx::Anon_obj::Create(0));
+HXLINE(  87)			this->save();
             		}
             	}
 
@@ -155,8 +157,8 @@ HXLINE(  83)			this->save();
 HX_DEFINE_DYNAMIC_FUNC0(DependencyModel_obj,loadDependencyGraph,(void))
 
 ::String DependencyModel_obj::getRootDirectory(){
-            	HX_GC_STACKFRAME(&_hx_pos_a8c2a3b9c8fe0cf3_89_getRootDirectory)
-HXDLIN(  89)		return ::StringTools_obj::trim( ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git",12,84,4e,00),::Array_obj< ::String >::fromData( _hx_array_data_275ec86c_8,2))->_hx_stdout->readAll(null())->toString());
+            	HX_GC_STACKFRAME(&_hx_pos_a8c2a3b9c8fe0cf3_93_getRootDirectory)
+HXDLIN(  93)		return ::StringTools_obj::trim( ::sys::io::Process_obj::__alloc( HX_CTX ,HX_("git",12,84,4e,00),::Array_obj< ::String >::fromData( _hx_array_data_275ec86c_8,2))->_hx_stdout->readAll(null())->toString());
             	}
 
 
