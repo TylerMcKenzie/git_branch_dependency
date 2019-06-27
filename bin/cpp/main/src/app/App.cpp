@@ -380,7 +380,7 @@ HXLINE( 250)		::Sys_obj::println(HX_("    git-dependency - Manages branches as d
 HXLINE( 251)		::Sys_obj::println(HX_("",00,00,00,00));
 HXLINE( 252)		::Sys_obj::println(HX_("SYNOPSIS",94,8e,ef,e1));
 HXLINE( 253)		::Sys_obj::println(HX_("    git dependency [add|-a <branch>] [delete|-d <branch>] [help|-h]",ec,51,cd,b4));
-HXLINE( 254)		::Sys_obj::println(HX_("                   [update|-u] [status|-s] [list|-s]",b9,53,7e,45));
+HXLINE( 254)		::Sys_obj::println(HX_("                   [update|-u] [status|-s] [list|-s] [prune|-p]",d4,15,a0,11));
 HXLINE( 255)		::Sys_obj::println(HX_("",00,00,00,00));
 HXLINE( 256)		::Sys_obj::println(HX_("OPTIONS",3e,07,d2,5f));
 HXLINE( 257)		::Sys_obj::println(HX_("    add | -a",17,63,48,60));
