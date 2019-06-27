@@ -1,7 +1,7 @@
 -cp src
 #-dce full
 
--D haxeJSON
+#-D haxeJSON
 
 -hl bin/hl_c/main.c
 

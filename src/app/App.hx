@@ -73,7 +73,7 @@ class App {
                     addBranchDependency(dep);
                 case DELETE_L | DELETE_S:
                     var dep = args[i+1];
-                    removeDependency(dep);
+                    removeBranchDependency(dep);
                 case PRUNE_L | PRUNE_S:
                     updateRemotes();
 
@@ -237,7 +237,7 @@ class App {
 
         for (dependency in dependencies) {
             if (masterMergedBranches.indexOf(dependency) > -1 && dependency != "master") {
-                removeDependency(dependency);
+                removeBranchDependency(dependency);
             }
         }
     }
