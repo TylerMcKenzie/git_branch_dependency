@@ -63,11 +63,30 @@ class App {
                     checkDependencyRemoteStatus();
                     break;
                 case UPDATE_L | UPDATE_S:
-                    var j = i;
                     var dependencies = dependencyModel.getDependencies();
+                    var arg_dependencies = [];
+                    var j = i + 1;
 
-                    if (dependencies.indexOf(args[j+1])) > -1) {
-                        
+                    if (dependencies.indexOf(args[j]) > -1) {
+                        arg_dependencies.push(args[j]);
+
+                        var dependencyFound = true;
+                        while (dependencyFound) {
+                            j++;
+
+                            if (
+                                dependencies.indexOf(args[j]) > -1 &&
+                                arg_dependencies.indexOf(args[j]) < 0
+                            ) {
+                                arg_dependencies.push(args[j]);
+                            } else {
+                                dependencyFound = false;
+                            }
+                        }
+                    }
+
+                    if (arg_dependencies.length > 0) {
+                        dependencies = arg_dependencies;
                     }
 
                     Sys.println("Updating remotes...");
