@@ -59,8 +59,11 @@ class HXCPP_CLASS_ATTRIBUTES App_obj : public hx::Object
 		void removeDependency(::String dependency);
 		::Dynamic removeDependency_dyn();
 
-		void updateDependencyRemotes();
+		void updateDependencyRemotes(::Array< ::String > dependencies);
 		::Dynamic updateDependencyRemotes_dyn();
+
+		bool updateDependencyBranch(::String branch);
+		::Dynamic updateDependencyBranch_dyn();
 
 		void updateBranch(::String branch);
 		::Dynamic updateBranch_dyn();
