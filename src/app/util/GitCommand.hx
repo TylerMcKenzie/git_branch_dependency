@@ -1,8 +1,6 @@
 package app.util;
 
 class GitCommand {
-    public function new() {}
-    
     public static function branch(args: Array<String>) : Bool
     {
         return new Sys.command("git branch", args);

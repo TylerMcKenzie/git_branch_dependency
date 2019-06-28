@@ -3,8 +3,6 @@ package app.util;
 import sys.io.Process;
 
 class GitProcess {
-    public function new() {}
-
     public static function branch(args: Array<String>) : Process
     {
         return new Process("git branch", args);
