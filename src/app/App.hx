@@ -68,9 +68,7 @@ class App {
                     var j = i + 1;
 
                     if (
-                        dependencies.indexOf(args[j]) > -1 &&
-                        args[j] != null &&
-                        !StringTools.startsWith(args[j], "-")
+                        dependencies.indexOf(args[j]) > -1
                     ) {
                         arg_dependencies.push(args[j]);
 
@@ -87,6 +85,8 @@ class App {
                                 dependencyFound = false;
                             }
                         }
+                    } else if (args[j] == null) {
+                        Sys.println('Updating all dependencies...');                        
                     } else {
                         Sys.println('[WARN] Branch: \'${args[j]}\' not found in dependency list.');
                         break;
