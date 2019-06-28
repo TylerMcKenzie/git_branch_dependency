@@ -67,29 +67,29 @@ class App {
                     var arg_dependencies = [];
                     var j = i + 1;
 
-                    if (
-                        dependencies.indexOf(args[j]) > -1
-                    ) {
-                        arg_dependencies.push(args[j]);
+                    if (args[j] != null) {
+                        if (
+                            dependencies.indexOf(args[j]) > -1
+                        ) {
+                            arg_dependencies.push(args[j]);
 
-                        var dependencyFound = true;
-                        while (dependencyFound) {
-                            j++;
+                            var dependencyFound = true;
+                            while (dependencyFound) {
+                                j++;
 
-                            if (
-                                dependencies.indexOf(args[j]) > -1 &&
-                                arg_dependencies.indexOf(args[j]) < 0
-                            ) {
-                                arg_dependencies.push(args[j]);
-                            } else {
-                                dependencyFound = false;
+                                if (
+                                    dependencies.indexOf(args[j]) > -1 &&
+                                    arg_dependencies.indexOf(args[j]) < 0
+                                ) {
+                                    arg_dependencies.push(args[j]);
+                                } else {
+                                    dependencyFound = false;
+                                }
                             }
+                        } else {
+                            Sys.println('[WARN] Branch: \'${args[j]}\' not found in dependency list.');
+                            break;
                         }
-                    } else if (args[j] == null) {
-                        Sys.println('Updating all dependencies...');                        
-                    } else {
-                        Sys.println('[WARN] Branch: \'${args[j]}\' not found in dependency list.');
-                        break;
                     }
 
                     if (arg_dependencies.length > 0) {
