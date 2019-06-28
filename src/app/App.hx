@@ -67,7 +67,11 @@ class App {
                     var arg_dependencies = [];
                     var j = i + 1;
 
-                    if (dependencies.indexOf(args[j]) > -1) {
+                    if (
+                        dependencies.indexOf(args[j]) > -1 &&
+                        args[j] != null &&
+                        !StringTools.startsWith(args[j], "-")
+                    ) {
                         arg_dependencies.push(args[j]);
 
                         var dependencyFound = true;
