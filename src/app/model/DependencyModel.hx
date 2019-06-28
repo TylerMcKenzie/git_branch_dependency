@@ -1,5 +1,7 @@
 package app.model;
 
+import app.util.GitProcess;
+
 import sys.io.File;
 import sys.io.Process;
 import sys.FileSystem;
@@ -90,6 +92,6 @@ class DependencyModel {
 
     private function getRootDirectory() : String
     {
-        return StringTools.trim(new Process("git", ["rev-parse", "--show-toplevel"]).stdout.readAll().toString());
+        return StringTools.trim(GitProcess.revParse(["--show-toplevel"]).stdout.readAll().toString());
     }
 }
