@@ -176,7 +176,7 @@ class App {
     private function updateDependencyBranch(branch:String) : Bool
     {
         if (GitCommand.pull(["origin", branch, "--no-ff"]) != 0) {
-            var diffFiles = GitProcess.diff(["-diff-filter=UU", "--name-only"]).stdout.readAll().toString();
+            var diffFiles = GitProcess.diff(["--diff-filter=UU", "--name-only"]).stdout.readAll().toString();
 
             var unmergedFiles = [];
             for (file in diffFiles.split("\n")) {
