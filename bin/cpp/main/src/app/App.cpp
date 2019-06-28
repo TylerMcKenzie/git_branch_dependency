@@ -57,7 +57,7 @@ static const ::String _hx_array_data_2514e634_18[] = {
 	HX_("diff",05,5c,69,42),
 };
 static const ::String _hx_array_data_2514e634_19[] = {
-	HX_("-diff-filter=UU",8a,b2,34,11),HX_("--name-only",8e,ea,71,0d),
+	HX_("--diff-filter=UU",fd,ec,ab,14),HX_("--name-only",8e,ea,71,0d),
 };
 static const ::String _hx_array_data_2514e634_20[] = {
 	HX_("config",c2,56,d2,c7),
