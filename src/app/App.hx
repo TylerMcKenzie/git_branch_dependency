@@ -4,8 +4,6 @@ import app.model.DependencyModel;
 
 import app.util.Formatter;
 import app.util.Git;
-import app.util.GitCommand;
-import app.util.GitProcess;
 
 import haxe.io.Input;
 
