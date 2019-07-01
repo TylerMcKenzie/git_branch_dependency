@@ -53,6 +53,9 @@ class HXCPP_CLASS_ATTRIBUTES Process_obj : public hx::Object
 		 ::Dynamic exitCode(hx::Null< bool >  block);
 		::Dynamic exitCode_dyn();
 
+		void close();
+		::Dynamic close_dyn();
+
 };
 
 } // end namespace sys

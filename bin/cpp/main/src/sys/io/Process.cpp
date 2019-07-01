@@ -19,6 +19,7 @@
 
 HX_DEFINE_STACK_FRAME(_hx_pos_90f6f206b294b77b_96_new,"sys.io.Process","new",0x849b4c7a,"sys.io.Process.new","/usr/share/haxe/std/cpp/_std/sys/io/Process.hx",96,0x2d961692)
 HX_LOCAL_STACK_FRAME(_hx_pos_90f6f206b294b77b_107_exitCode,"sys.io.Process","exitCode",0x41e72111,"sys.io.Process.exitCode","/usr/share/haxe/std/cpp/_std/sys/io/Process.hx",107,0x2d961692)
+HX_LOCAL_STACK_FRAME(_hx_pos_90f6f206b294b77b_113_close,"sys.io.Process","close",0x0a954e52,"sys.io.Process.close","/usr/share/haxe/std/cpp/_std/sys/io/Process.hx",113,0x2d961692)
 namespace sys{
 namespace io{
 
@@ -72,6 +73,14 @@ HXLINE( 109)		return _hx_std_process_exit(this->p);
 
 HX_DEFINE_DYNAMIC_FUNC1(Process_obj,exitCode,return )
 
+void Process_obj::close(){
+            	HX_STACKFRAME(&_hx_pos_90f6f206b294b77b_113_close)
+HXDLIN( 113)		_hx_std_process_close(this->p);
+            	}
+
+
+HX_DEFINE_DYNAMIC_FUNC0(Process_obj,close,(void))
+
 
 hx::ObjectPtr< Process_obj > Process_obj::__new(::String cmd,::Array< ::String > args) {
 	hx::ObjectPtr< Process_obj > __this = new Process_obj();
@@ -116,6 +125,7 @@ hx::Val Process_obj::__Field(const ::String &inName,hx::PropertyAccess inCallPro
 		break;
 	case 5:
 		if (HX_FIELD_EQ(inName,"stdin") ) { return hx::Val( _hx_stdin ); }
+		if (HX_FIELD_EQ(inName,"close") ) { return hx::Val( close_dyn() ); }
 		break;
 	case 6:
 		if (HX_FIELD_EQ(inName,"stdout") ) { return hx::Val( _hx_stdout ); }
@@ -169,6 +179,7 @@ static ::String Process_obj_sMemberFields[] = {
 	HX_HCSTRING("stderr","\xa2","\x26","\xec","\x07"),
 	HX_HCSTRING("stdin","\x48","\xb3","\x0d","\x84"),
 	HX_HCSTRING("exitCode","\x6b","\xbb","\x88","\x01"),
+	HX_HCSTRING("close","\xb8","\x17","\x63","\x48"),
 	::String(null()) };
 
 static void Process_obj_sMarkStatics(HX_MARK_PARAMS) {
