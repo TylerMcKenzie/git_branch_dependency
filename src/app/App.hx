@@ -161,7 +161,7 @@ class App {
             if (Git.command("pull", gitPullArgs) != 0) {
                 Sys.println("Falling back to indiviually merging dependencies.");
                 
-                Git.process("reset", (["--hard"], function(process) {
+                Git.process("reset", ["--hard"], function(process) {
                     process.exitCode();
                     process.close();
                 });
