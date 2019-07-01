@@ -3,6 +3,7 @@ package app;
 import app.model.DependencyModel;
 
 import app.util.Formatter;
+import app.util.Git;
 import app.util.GitCommand;
 import app.util.GitProcess;
 
@@ -214,7 +215,10 @@ class App {
 
     private function updateBranch(branch:String) : Void
     {
-        GitProcess.fetch(["origin", '$branch:$branch']).exitCode();
+        Git.process("fetch", ["origin", '$branch:$branch'], function(process) {
+            process.exitCode();
+            process.close();
+        });
     }
 
     private function checkDependencyRemoteStatus() : Void
