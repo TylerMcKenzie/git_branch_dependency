@@ -158,10 +158,13 @@ class App {
             gitPullArgs.push("--no-ff");
 
             // If Octopus fails fall back to merging in order
-            if (GitCommand.pull(gitPullArgs) != 0) {
+            if (Git.command("pull", gitPullArgs) != 0) {
                 Sys.println("Falling back to indiviually merging dependencies.");
                 
-                GitProcess.reset(["--hard"]).exitCode();
+                Git.process("reset", (["--hard"], function(process) {
+                    process.exitCode();
+                    process.close();
+                });
 
                 for(branch in preparedBranches) {
                     if (!updateDependencyBranch(branch)) {
@@ -176,8 +179,13 @@ class App {
 
     private function updateDependencyBranch(branch:String) : Bool
     {
-        if (GitCommand.pull(["origin", branch, "--no-ff"]) != 0) {
-            var diffFiles = GitProcess.diff(["--diff-filter=UU", "--name-only"]).stdout.readAll().toString();
+        if (Git.command("pull", ["origin", branch, "--no-ff"]) != 0) {
+            var diffFiles = null;
+
+            Git.process("diff", ["--diff-filter=UU", "--name-only"], function(process) {
+                diffFiles = process.stdout.readAll().toString();
+                process.close();
+            });
 
             var unmergedFiles = [];
             for (file in diffFiles.split("\n")) {
@@ -187,7 +195,12 @@ class App {
             }
 
             // Open default editor if one exists
-            var editor = StringTools.trim(GitProcess.config(["--global", "core.editor"]).stdout.readAll().toString());
+            var editor = null;
+
+            Git.process("config", ["--global", "core.editor"], function(process) {
+                editor = StringTools.trim(process.stdout.readAll().toString());
+                process.close();
+            });
 
             if (editor.length > 0) {
                 if (unmergedFiles.length > 0) {
@@ -202,7 +215,10 @@ class App {
                     var confReg:EReg = ~/[Yy]/;
 
                     if (confReg.match(userInput)) {
-                        GitProcess.commit(["-am", "\'Updated merge conflicts\'"]).exitCode();
+                        Git.process("commit", ["-am", "\'Updated merge conflicts\'"], function(process) {
+                            process.exitCode();
+                            process.close();
+                        });
                     }
                 }
             } else {
@@ -240,9 +256,21 @@ class App {
     private function getBranchRemoteStatus(branch:String) : Dynamic
     {
         var branchToOrigin = '$branch...origin/$branch';
+        var ahead = null;
+        var behind = null;
 
-        var ahead = StringTools.trim(GitProcess.revList(["--left-only", "--count", branchToOrigin]).stdout.readAll().toString());
-        var behind = StringTools.trim(GitProcess.revList(["--right-only", "--count", branchToOrigin]).stdout.readAll().toString());
+        Git.process("revList", ["--left-only", "--count", branchToOrigin], function(process) {
+            ahead = process.stdout.readAll().toString();
+            process.close();
+        });
+
+        Git.process("revList", ["--right-only", "--count", branchToOrigin], function(process) {
+            behind = process.stdout.readAll().toString();
+            process.close();
+        });
+
+        ahead = StringTools.trim(ahead);
+        behind = StringTools.trim(behind);
 
         return {
             ahead: ahead,
@@ -252,7 +280,13 @@ class App {
 
     private function getBranchMergeStatus(branch:String) : String
     {
-        var dirtyMergedBranches = GitProcess.branch(["--merged"]).stdout.readAll().toString().split("\n");
+        var dirtyMergedBranches = null;
+
+        Git.process("branch", ["--merged"], function(process) {
+            dirtyMergedBranches = process.stdout.readAll().toString().split("\n");
+            process.close();
+        });
+
         var cleanMergedBranches = [for (dB in dirtyMergedBranches) StringTools.trim(dB)];
 
         if (cleanMergedBranches.indexOf(branch) == -1) {
@@ -264,25 +298,39 @@ class App {
 
     private function loadCurrentBranch() : String
     {
-        var process = GitProcess.revParse(["--abbrev-ref", "HEAD"]);
+        var branch = null;
+        Git.process("revParse", ["--abbrev-ref", "HEAD"], function(process) {
+            process.exitCode();
 
-        process.exitCode();
+            branch = process.stdout.readAll().toString();
 
-        var b = StringTools.trim(process.stdout.readAll().toString());
+            process.close();
+        });
 
-        return b;
+        branch = StringTools.trim(branch);
+
+        return branch;
     }
 
     private function updateRemotes() : Void
     {
         // This updates remotes to get accurate checks
-        GitProcess.remote(["update"]).exitCode();
+        Git.process("remote", ["update"], function(process) {
+            process.exitCode();
+            process.close();
+        });
     }
 
     private function pruneDependencies() : Void
     {
         var dependencies = dependencyModel.getDependencies();
-        var masterMergedBranches = GitProcess.branch(["--merged", "master"]).stdout.readAll().toString().split("\n");
+        var masterMergedBranches = null;
+
+        Git.process("branch", ["--merged", "master"], function(process) {
+            masterMergedBranches = process.stdout.readAll().toString().split("\n");
+            process.close();
+        });
+        
         masterMergedBranches = [ for (branch in masterMergedBranches) StringTools.trim(branch) ];
 
         for (dependency in dependencies) {
