@@ -46,6 +46,8 @@ class Git
                 process = GitProcess.revList(args);
             case REV_PARSE:
                 process = GitProcess.revParse(args);
+            default:
+                Sys.println('Git Command: "$cmd", does not exist.');
         }
 
         callback(process);
@@ -76,6 +78,8 @@ class Git
                 exitCode = GitCommand.revList(args);
             case REV_PARSE:
                 exitCode = GitCommand.revParse(args);
+            default:
+                Sys.println('Git Command: "$cmd", does not exist.');
         }
 
         return exitCode;
