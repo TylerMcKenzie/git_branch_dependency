@@ -259,12 +259,12 @@ class App {
         var ahead = null;
         var behind = null;
 
-        Git.process("revList", ["--left-only", "--count", branchToOrigin], function(process) {
+        Git.process("rev-list", ["--left-only", "--count", branchToOrigin], function(process) {
             ahead = process.stdout.readAll().toString();
             process.close();
         });
 
-        Git.process("revList", ["--right-only", "--count", branchToOrigin], function(process) {
+        Git.process("rev-list", ["--right-only", "--count", branchToOrigin], function(process) {
             behind = process.stdout.readAll().toString();
             process.close();
         });
@@ -299,7 +299,7 @@ class App {
     private function loadCurrentBranch() : String
     {
         var branch = null;
-        Git.process("revParse", ["--abbrev-ref", "HEAD"], function(process) {
+        Git.process("rev-parse", ["--abbrev-ref", "HEAD"], function(process) {
             process.exitCode();
 
             branch = process.stdout.readAll().toString();
