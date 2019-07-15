@@ -152,8 +152,7 @@ class App {
         }
 
         if (preparedBranches.length > 0) {
-            var gitPullArgs = ["origin"].concat(preparedBranches);
-            gitPullArgs.push("--no-ff");
+            var gitPullArgs = ["origin"].concat(preparedBranches).push("--no-ff");
 
             // If Octopus fails fall back to merging in order
             if (Git.command("pull", gitPullArgs) != 0) {
