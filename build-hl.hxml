@@ -1,0 +1,10 @@
+-cp src
+# -dce full
+
+#-D haxeJSON
+#-D staticStdLibs
+
+-hl bin/hl/main.hl
+
+# main
+-main src.Main
