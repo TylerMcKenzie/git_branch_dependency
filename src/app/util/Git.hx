@@ -4,8 +4,7 @@ import sys.io.Process;
 import app.util.GitCommand;
 import app.util.GitProcess;
 
-@:enum
-abstract GIT_COMMANDS(String)
+enum abstract GIT_COMMANDS(String) to String
 {
     var PULL      = "pull";
     var BRANCH    = "branch";

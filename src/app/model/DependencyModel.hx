@@ -1,9 +1,8 @@
 package app.model;
 
-import app.util.GitProcess;
+import app.util.Git;
 
 import sys.io.File;
-import sys.io.Process;
 import sys.FileSystem;
 
 import haxe.Json;
@@ -92,6 +91,13 @@ class DependencyModel {
 
     private function getRootDirectory() : String
     {
-        return StringTools.trim(GitProcess.revParse(["--show-toplevel"]).stdout.readAll().toString());
+        var root = '';
+
+        Git.process("rev-parse", ["--show-toplevel"], function (process) {
+            root = process.stdout.readAll().toString();
+            process.exitCode();
+        });
+
+        return StringTools.trim(root);
     }
 }

@@ -9,7 +9,8 @@ import haxe.io.Input;
 
 import sys.io.Process;
 
-@:enum abstract COMMAND(String) {
+enum abstract COMMAND(String) to String
+{
     var ADD_L = "add";
     var ADD_S = "-a";
 
@@ -123,8 +124,12 @@ class App {
 
     private function addDependency(dependency:String) : Void
     {
-        dependencyModel.addDependency(dependency);
-        dependencyModel.save();
+        if (dependency != null && dependency.length != 0) {
+            dependencyModel.addDependency(dependency);
+            dependencyModel.save();
+        } else {
+            Sys.println("Dependency cannot be empty.");
+        }
     }
 
     private function removeDependency(dependency:String) : Void

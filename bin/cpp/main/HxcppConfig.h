@@ -13,8 +13,12 @@
 #define HXCPP_VISIT_ALLOCS 
 #endif
 
+#if !defined(HX_SMART_STRINGS) && !defined(NO_HX_SMART_STRINGS)
+#define HX_SMART_STRINGS 
+#endif
+
 #if !defined(HXCPP_API_LEVEL) && !defined(NO_HXCPP_API_LEVEL)
-#define HXCPP_API_LEVEL 331
+#define HXCPP_API_LEVEL 400
 #endif
 
 #if !defined(HXCPP_M64) && !defined(NO_HXCPP_M64)
