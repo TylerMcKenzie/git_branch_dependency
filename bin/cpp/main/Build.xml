@@ -1,5 +1,5 @@
 <xml>
-<set name="HXCPP_API_LEVEL" value="331" />
+<set name="HXCPP_API_LEVEL" value="400" />
 <files id="haxe">
 <compilerflag value="-Iinclude"/>
   <file name="src/sys/io/Process.cpp" >
@@ -36,6 +36,7 @@
    <depend name="include/sys/io/FileInput.h"/>
   </file>
   <file name="src/sys/io/File.cpp" >
+   <depend name="include/haxe/io/Encoding.h"/>
    <depend name="include/haxe/io/Output.h"/>
    <depend name="include/sys/io/File.h"/>
    <depend name="include/sys/io/FileOutput.h"/>
@@ -53,6 +54,7 @@
   </file>
   <file name="src/haxe/io/Output.cpp" >
    <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/haxe/io/Encoding.h"/>
    <depend name="include/haxe/io/Error.h"/>
    <depend name="include/haxe/io/Output.h"/>
   </file>
@@ -69,12 +71,16 @@
   <file name="src/haxe/io/Eof.cpp" >
    <depend name="include/haxe/io/Eof.h"/>
   </file>
+  <file name="src/haxe/io/Encoding.cpp" >
+   <depend name="include/haxe/io/Encoding.h"/>
+  </file>
   <file name="src/haxe/io/BytesBuffer.cpp" >
    <depend name="include/haxe/io/Bytes.h"/>
    <depend name="include/haxe/io/BytesBuffer.h"/>
   </file>
   <file name="src/haxe/io/Bytes.cpp" >
    <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/haxe/io/Encoding.h"/>
    <depend name="include/haxe/io/Error.h"/>
   </file>
   <file name="src/haxe/format/JsonPrinter.cpp" >
@@ -86,7 +92,6 @@
    <depend name="include/Type.h"/>
    <depend name="include/ValueType.h"/>
    <depend name="include/haxe/IMap.h"/>
-   <depend name="include/haxe/Utf8.h"/>
    <depend name="include/haxe/ds/StringMap.h"/>
    <depend name="include/haxe/format/JsonPrinter.h"/>
   </file>
@@ -99,9 +104,6 @@
   <file name="src/haxe/ds/StringMap.cpp" >
    <depend name="include/haxe/IMap.h"/>
    <depend name="include/haxe/ds/StringMap.h"/>
-  </file>
-  <file name="src/haxe/Utf8.cpp" >
-   <depend name="include/haxe/Utf8.h"/>
   </file>
   <file name="src/haxe/IMap.cpp" >
    <depend name="include/haxe/IMap.h"/>
@@ -135,6 +137,7 @@
    <depend name="include/sys/io/Process.h"/>
   </file>
   <file name="src/Type.cpp" >
+   <depend name="include/Reflect.h"/>
    <depend name="include/Type.h"/>
    <depend name="include/ValueType.h"/>
   </file>
@@ -144,14 +147,21 @@
   <file name="src/Sys.cpp" >
    <depend name="include/StringTools.h"/>
    <depend name="include/Sys.h"/>
+   <depend name="include/haxe/SysTools.h"/>
    <depend name="include/haxe/io/Input.h"/>
    <depend name="include/sys/io/FileInput.h"/>
   </file>
   <file name="src/StringTools.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/StringBuf.h"/>
+   <depend name="include/StringTools.h"/>
+  </file>
+  <file name="src/haxe/SysTools.cpp" >
    <depend name="include/EReg.h"/>
    <depend name="include/Std.h"/>
    <depend name="include/StringBuf.h"/>
    <depend name="include/StringTools.h"/>
+   <depend name="include/haxe/SysTools.h"/>
   </file>
   <file name="src/StringBuf.cpp" >
    <depend name="include/StringBuf.h"/>
@@ -167,13 +177,13 @@
   </file>
   <file name="src/Date.cpp" >
    <depend name="include/Date.h"/>
-   <depend name="include/Std.h"/>
   </file>
   <file name="src/__boot__.cpp" >
    <depend name="include/haxe/io/Error.h"/>
+   <depend name="include/haxe/io/Encoding.h"/>
    <depend name="include/ValueType.h"/>
    <depend name="include/app/util/Formatter.h"/>
-   <depend name="include/StringTools.h"/>
+   <depend name="include/haxe/SysTools.h"/>
   </file>
   <file name="src/__files__.cpp" if='HXCPP_DEBUGGER'>
   </file>
@@ -204,4 +214,5 @@
 <include name="${HXCPP}/src/hx/libs/std/Build.xml"/>
 <include name="${HXCPP}/src/hx/libs/std/Build.xml"/>
 <include name="${HXCPP}/src/hx/libs/std/Build.xml"/>
+<error value="Hxcpp is out of date - please update" unlessApi="400" />
 </xml>
