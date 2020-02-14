@@ -1,7 +1,8 @@
 package app.model;
 
+import app.util.Git;
+
 import sys.io.File;
-import sys.io.Process;
 import sys.FileSystem;
 
 import haxe.Json;
@@ -12,7 +13,7 @@ typedef DependencyData = {
 }
 
 class DependencyModel {
-    public var JSON_FILE:String = "/.git/git-dep.json";
+    public var JSON_FILE:String = "git-dep.json";
 
     private var currentBranch:String = null;
 
@@ -23,7 +24,11 @@ class DependencyModel {
     public function new()
     {
         var root = getRootDirectory();
-        JSON_FILE = root + JSON_FILE;
+
+        if (root.length > 0) {
+            JSON_FILE = root + "/.git/" + JSON_FILE;
+        }
+
         loadDependencyGraph();
     }
 
@@ -86,6 +91,13 @@ class DependencyModel {
 
     private function getRootDirectory() : String
     {
-        return StringTools.trim(new Process("git", ["rev-parse", "--show-toplevel"]).stdout.readAll().toString());
+        var root = '';
+
+        Git.process("rev-parse", ["--show-toplevel"], function (process) {
+            root = process.stdout.readAll().toString();
+            process.exitCode();
+        });
+
+        return StringTools.trim(root);
     }
 }

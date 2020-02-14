@@ -1,13 +1,16 @@
 package app;
 
 import app.model.DependencyModel;
+
 import app.util.Formatter;
+import app.util.Git;
 
 import haxe.io.Input;
 
 import sys.io.Process;
 
-@:enum abstract COMMAND(String) {
+enum abstract COMMAND(String) to String
+{
     var ADD_L = "add";
     var ADD_S = "-a";
 
@@ -63,10 +66,43 @@ class App {
                     checkDependencyRemoteStatus();
                     break;
                 case UPDATE_L | UPDATE_S:
+                    var dependencies = dependencyModel.getDependencies();
+                    var arg_dependencies = [];
+                    var j = i + 1;
+
+                    if (args[j] != null) {
+                        if (
+                            dependencies.indexOf(args[j]) > -1
+                        ) {
+                            arg_dependencies.push(args[j]);
+
+                            var dependencyFound = true;
+                            while (dependencyFound) {
+                                j++;
+
+                                if (
+                                    dependencies.indexOf(args[j]) > -1 &&
+                                    arg_dependencies.indexOf(args[j]) < 0
+                                ) {
+                                    arg_dependencies.push(args[j]);
+                                } else {
+                                    dependencyFound = false;
+                                }
+                            }
+                        } else {
+                            Sys.println('[WARN] Branch: \'${args[j]}\' not found in dependency list.');
+                            break;
+                        }
+                    }
+
+                    if (arg_dependencies.length > 0) {
+                        dependencies = arg_dependencies;
+                    }
+
                     Sys.println("Updating remotes...");
                     updateRemotes();
 
-                    updateDependencyRemotes();
+                    updateDependencyRemotes(dependencies);
                     break;
                 case ADD_L | ADD_S:
                     var dep = args[i+1];
@@ -88,8 +124,12 @@ class App {
 
     private function addBranchDependency(dependency:String) : Void
     {
-        dependencyModel.addDependency(dependency);
-        dependencyModel.save();
+        if (dependency != null && dependency.length != 0) {
+            dependencyModel.addDependency(dependency);
+            dependencyModel.save();
+        } else {
+            Sys.println("Dependency cannot be empty.");
+        }
     }
 
     private function removeBranchDependency(dependency:String) : Void
@@ -98,66 +138,40 @@ class App {
         dependencyModel.save();
     }
 
-    private function updateDependencyRemotes() : Void
+    private function updateDependencyRemotes(dependencies:Array<String>) : Void
     {
-        var deps = dependencyModel.getDependencies();
         var updated = false;
 
         var preparedBranches:Array<String> = [];
 
-        for(dep in deps) {
-            var dependencyStatus = getBranchRemoteStatus(dep);
+        for(dependency in dependencies) {
+            var dependencyStatus = getBranchRemoteStatus(dependency);
 
             if (Std.parseInt(dependencyStatus.behind) > 0) {
-                updateBranch(dep);
+                updateBranch(dependency);
             }
 
-            if (getBranchMergeStatus(dep) == "unmerged") {
-                preparedBranches.push(dep);
+            if (getBranchMergeStatus(dependency) == "unmerged") {
+                preparedBranches.push(dependency);
             }
         }
 
         if (preparedBranches.length > 0) {
-            var gitPullArgs = ["pull", "origin"].concat(preparedBranches);
+            var gitPullArgs = ["origin"].concat(preparedBranches);
             gitPullArgs.push("--no-ff");
 
             // If Octopus fails fall back to merging in order
-            if (Sys.command("git", gitPullArgs) != 0) {
+            if (Git.command("pull", gitPullArgs) != 0) {
                 Sys.println("Falling back to indiviually merging dependencies.");
                 
-                new Process("git reset --hard").exitCode();
+                Git.process("reset", ["--hard"], function(process) {
+                    process.exitCode();
+                    process.close();
+                });
 
                 for(branch in preparedBranches) {
-                    if (Sys.command("git", ["pull", "origin", branch, "--no-ff"]) != 0) {
-                        var diffFiles = new Process("git diff --diff-filter=UU --name-only").stdout.readAll().toString();
-
-                        var unmergedFiles = [];
-                        for (file in diffFiles.split("\n")) {
-                            if (file.length > 0) {
-                                unmergedFiles.push(StringTools.trim(file));
-                            }
-                        }
-
-                        // Open default editor if one exists
-                        var editor = StringTools.trim(new Process("git config --global core.editor").stdout.readAll().toString());
-
-                        if (editor.length > 0) {
-                            if (unmergedFiles.length > 0) {
-                                if (Sys.command(editor, unmergedFiles) != 0) {
-                                    Sys.println('An error occurred when opening \'${editor}\'');
-                                    return;
-                                }
-
-                                Sys.println("Commit these changes? [Y/n]: ");
-
-                                var userInput = input.readLine();
-                                var confReg:EReg = ~/[Yy]/;
-
-                                if (confReg.match(userInput)) {
-                                    new Process("git", ["commit", "-am", "\'Updated merge conflicts\'"]).exitCode();
-                                }
-                            }
-                        }
+                    if (!updateDependencyBranch(branch)) {
+                        throw 'There was an error updating: \'$branch\'';
                     }
                 }
             }
@@ -166,9 +180,64 @@ class App {
         }
     }
 
+    private function updateDependencyBranch(branch:String) : Bool
+    {
+        if (Git.command("pull", ["origin", branch, "--no-ff"]) != 0) {
+            var diffFiles = null;
+
+            Git.process("diff", ["--diff-filter=UU", "--name-only"], function(process) {
+                diffFiles = process.stdout.readAll().toString();
+                process.close();
+            });
+
+            var unmergedFiles = [];
+            for (file in diffFiles.split("\n")) {
+                if (file.length > 0) {
+                    unmergedFiles.push(StringTools.trim(file));
+                }
+            }
+
+            // Open default editor if one exists
+            var editor = null;
+
+            Git.process("config", ["--global", "core.editor"], function(process) {
+                editor = StringTools.trim(process.stdout.readAll().toString());
+                process.close();
+            });
+
+            if (editor.length > 0) {
+                if (unmergedFiles.length > 0) {
+                    if (Sys.command(editor, unmergedFiles) != 0) {
+                        Sys.println('An error occurred when opening \'${editor}\'');
+                        return false;
+                    }
+
+                    Sys.println("Commit these changes? [Y/n]: ");
+
+                    var userInput = input.readLine();
+                    var confReg:EReg = ~/[Yy]/;
+
+                    if (confReg.match(userInput)) {
+                        Git.process("commit", ["-am", "\'Updated merge conflicts\'"], function(process) {
+                            process.exitCode();
+                            process.close();
+                        });
+                    }
+                }
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private function updateBranch(branch:String) : Void
     {
-        new Process("git", ["fetch", "origin", '$branch:$branch']).exitCode();
+        Git.process("fetch", ["origin", '$branch:$branch'], function(process) {
+            process.exitCode();
+            process.close();
+        });
     }
 
     private function checkDependencyRemoteStatus() : Void
@@ -190,9 +259,21 @@ class App {
     private function getBranchRemoteStatus(branch:String) : Dynamic
     {
         var branchToOrigin = '$branch...origin/$branch';
+        var ahead = null;
+        var behind = null;
 
-        var ahead = StringTools.trim(new Process("git", ["rev-list", "--left-only", "--count", branchToOrigin]).stdout.readAll().toString());
-        var behind = StringTools.trim(new Process("git", ["rev-list", "--right-only", "--count", branchToOrigin]).stdout.readAll().toString());
+        Git.process("rev-list", ["--left-only", "--count", branchToOrigin], function(process) {
+            ahead = process.stdout.readAll().toString();
+            process.close();
+        });
+
+        Git.process("rev-list", ["--right-only", "--count", branchToOrigin], function(process) {
+            behind = process.stdout.readAll().toString();
+            process.close();
+        });
+
+        ahead = StringTools.trim(ahead);
+        behind = StringTools.trim(behind);
 
         return {
             ahead: ahead,
@@ -202,7 +283,13 @@ class App {
 
     private function getBranchMergeStatus(branch:String) : String
     {
-        var dirtyMergedBranches = new Process("git", ["branch", "--merged"]).stdout.readAll().toString().split("\n");
+        var dirtyMergedBranches = null;
+
+        Git.process("branch", ["--merged"], function(process) {
+            dirtyMergedBranches = process.stdout.readAll().toString().split("\n");
+            process.close();
+        });
+
         var cleanMergedBranches = [for (dB in dirtyMergedBranches) StringTools.trim(dB)];
 
         if (cleanMergedBranches.indexOf(branch) == -1) {
@@ -214,25 +301,39 @@ class App {
 
     private function loadCurrentBranch() : String
     {
-        var process = new Process("git", ["rev-parse", "--abbrev-ref", "HEAD"]);
+        var branch = null;
+        Git.process("rev-parse", ["--abbrev-ref", "HEAD"], function(process) {
+            process.exitCode();
 
-        process.exitCode();
+            branch = process.stdout.readAll().toString();
 
-        var b = StringTools.trim(process.stdout.readAll().toString());
+            process.close();
+        });
 
-        return b;
+        branch = StringTools.trim(branch);
+
+        return branch;
     }
 
     private function updateRemotes() : Void
     {
         // This updates remotes to get accurate checks
-        new Process("git", ["remote", "update"]).exitCode();
+        Git.process("remote", ["update"], function(process) {
+            process.exitCode();
+            process.close();
+        });
     }
 
     private function pruneDependencies() : Void
     {
         var dependencies = dependencyModel.getDependencies();
-        var masterMergedBranches = new Process("git", ["branch", "--merged", "master"]).stdout.readAll().toString().split("\n");
+        var masterMergedBranches = null;
+
+        Git.process("branch", ["--merged", "master"], function(process) {
+            masterMergedBranches = process.stdout.readAll().toString().split("\n");
+            process.close();
+        });
+        
         masterMergedBranches = [ for (branch in masterMergedBranches) StringTools.trim(branch) ];
 
         for (dependency in dependencies) {
@@ -251,7 +352,7 @@ class App {
         Sys.println("");
         Sys.println("SYNOPSIS");
         Sys.println("    git dependency [add|-a <branch>] [delete|-d <branch>] [help|-h]");
-        Sys.println("                   [update|-u] [status|-s] [list|-s]");
+        Sys.println("                   [update <branch> |-u <branch>] [status|-s] [list|-s] [prune|-p]");
         Sys.println("");
         Sys.println("OPTIONS");
         Sys.println("    add | -a");
@@ -260,8 +361,8 @@ class App {
         Sys.println("        remove a branch from the dependency list.");
         Sys.println("    -help | h");
         Sys.println("        display help.");
-        Sys.println("    update | -u");
-        Sys.println("        attempts to pull in dependencies with an octopus merge. If the merge fails it will fallback to individual merge/conflict resolution.");
+        Sys.println("    update <branch> | -u <branch>");
+        Sys.println("        attempts to update and pull in dependency. If no branch is supplied it will attempt to pull in all dependencies with an octopus merge. If the merge fails it will fallback to individual merge/conflict resolution.");
         Sys.println("    status | -s");
         Sys.println("        checks to see if there are any changes between the current HEAD and the branches dependencies and outputs a table with those changes.");
         Sys.println("    list | -l");
