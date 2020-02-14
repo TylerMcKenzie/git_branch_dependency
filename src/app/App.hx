@@ -106,10 +106,10 @@ class App {
                     break;
                 case ADD_L | ADD_S:
                     var dep = args[i+1];
-                    addBranchDependency(dep);
+                    addDependency(dep);
                 case DELETE_L | DELETE_S:
                     var dep = args[i+1];
-                    removeBranchDependency(dep);
+                    removeDependency(dep);
                 case PRUNE_L | PRUNE_S:
                     updateRemotes();
 
@@ -122,7 +122,7 @@ class App {
         }
     }
 
-    private function addBranchDependency(dependency:String) : Void
+    private function addDependency(dependency:String) : Void
     {
         if (dependency != null && dependency.length != 0) {
             dependencyModel.addDependency(dependency);
@@ -132,7 +132,7 @@ class App {
         }
     }
 
-    private function removeBranchDependency(dependency:String) : Void
+    private function removeDependency(dependency:String) : Void
     {
         dependencyModel.removeDependency(dependency);
         dependencyModel.save();
@@ -338,7 +338,7 @@ class App {
 
         for (dependency in dependencies) {
             if (masterMergedBranches.indexOf(dependency) > -1 && dependency != "master") {
-                removeBranchDependency(dependency);
+                removeDependency(dependency);
             }
         }
     }
