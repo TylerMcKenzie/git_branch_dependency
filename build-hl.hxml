@@ -1,8 +1,7 @@
 -cp src
-# -dce full
+-dce full
 
-#-D haxeJSON
-#-D staticStdLibs
+-D haxeJSON
 
 -hl bin/hl/main.hl
 
