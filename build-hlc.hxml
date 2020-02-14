@@ -1,0 +1,11 @@
+-cp src
+-dce full
+
+-D haxeJSON
+
+-hl bin/hl_c/main.c
+
+# main
+-main src.Main
+
+-cmd gcc -O3 -std=c11 -o bin/hl_c/main -I bin/hl_c bin/hl_c/main.c -lhl /home/vagrant/code/release/tyler-stuff/haxe/haxe_hl/libhl.so
